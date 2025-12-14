@@ -9,31 +9,83 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
     <meta charset="UTF-8">
     <title>Mentor Dashboard</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .nav { background: #0056b3; color: white; padding: 15px; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        /* Shared Dark Theme */
+        body {
+            margin: 0; font-family: 'Segoe UI', sans-serif;
+            background-color: #1e2024; color: white;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background-color: #2d3436; padding: 15px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #444;
+        }
+        .navbar h2 { margin: 0; color: #3498db; /* Blue for Mentor */ }
+        .btn-logout {
+            padding: 8px 15px; background-color: #2980b9; color: white;
+            text-decoration: none; border-radius: 5px; font-size: 14px;
+        }
+
+        /* Content */
+        .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .dashboard-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px; margin-top: 20px;
+        }
+
+        .card {
+            background-color: #2d3436; padding: 25px; border-radius: 10px;
+            border: 1px solid #444; transition: 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); border-color: #3498db; }
+        
+        .list-item {
+            padding: 10px; border-bottom: 1px solid #444;
+            display: flex; justify-content: space-between;
+        }
+        .list-item:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
-    <div class="nav">
-        <h2>👩‍🏫 Mentor Dashboard</h2> <a href="index.html" style="color: white; float: right;">Logout</a> </div>
+    <div class="navbar">
+        <h2>👨‍🏫 Mentor Dashboard</h2>
+        <a href="index.html" class="btn-logout">Logout</a>
+    </div>
 
-    <h3>My Mentees</h3> <table>
-        <tr>
-            <th>ID</th> <th>Name</th> <th>Program</th> <th>Sem</th> <th>Performance</th>
-        </tr>
-        <tr>
-            <td>101</td> <td>Ali</td> <td>SE</td> <td>3</td> 
-            <td><a href="#">View Performance</a></td> </tr>
-        <tr>
-            <td>102</td> <td>Abu</td> <td>CS</td> <td>5</td> 
-            <td><a href="#">View Performance</a></td>
-        </tr>
-    </table>
+    <div class="container">
+        <h1>My Dashboard</h1>
+        
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>📅 My Timetable</h3>
+                <p style="color:#b2bec3; margin-bottom: 15px;">Manage your availability slots.</p>
+                
+                <div class="list-item">
+                    <span>Monday</span> <span style="color:#2ecc71">10:00 AM - 12:00 PM</span>
+                </div>
+                <div class="list-item">
+                    <span>Wednesday</span> <span style="color:#2ecc71">2:00 PM - 4:00 PM</span>
+                </div>
+                <br>
+                <button style="width:100%; padding:10px; background:#3498db; border:none; color:white; border-radius:5px; cursor:pointer;">Update Timetable</button>
+            </div>
 
-    <hr>
+            <div class="card">
+                <h3>🎓 My Assigned Mentees</h3>
+                <p style="color:#b2bec3; margin-bottom: 15px;">Students under your supervision.</p>
 
-    <h3>Manage Timetable</h3> <p>Add available slots for mentees to book.</p>
-    <button>Add New Slot</button> <button>Remove Slot</button> </body>
+                <div class="list-item">
+                    <span>Ali Bin Abu (Sem 3)</span> <a href="#" style="color:#3498db">View</a>
+                </div>
+                <div class="list-item">
+                    <span>Siti Aminah (Sem 1)</span> <a href="#" style="color:#3498db">View</a>
+                </div>
+                <div class="list-item">
+                    <span>John Doe (Sem 5)</span> <a href="#" style="color:#3498db">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 </html>
