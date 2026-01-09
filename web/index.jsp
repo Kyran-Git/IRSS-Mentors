@@ -1,17 +1,120 @@
-<%-- 
-    Document   : index
-    Created on : Dec 14, 2025, 3:08:57 AM
-    Author     : nikla
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <style>
+            /* 1. Reset and Dark Base */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                /* Dark background gradient */
+                background: linear-gradient(135deg, #1e2024 0%, #232526 100%);
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: #ffffff; /* Default text color is white */
+            }
+
+            /* 2. The Dark Card */
+            .login-card {
+                background-color: #2d3436; /* Dark Gray Card */
+                padding: 40px;
+                border-radius: 12px;
+                /* Subtle shadow + faint border for contrast */
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                border: 1px solid #444; 
+                text-align: center;
+                width: 100%;
+                max-width: 400px;
+                transition: transform 0.3s ease;
+            }
+
+            .login-card:hover {
+                transform: translateY(-5px);
+                border-color: #666; /* Lighten border on hover */
+            }
+
+            /* 3. Typography */
+            h1 {
+                color: #ffffff;
+                margin-bottom: 10px;
+                font-size: 24px;
+                letter-spacing: 1px;
+            }
+
+            p {
+                color: #b2bec3; /* Light Gray text */
+                margin-bottom: 30px;
+                font-size: 14px;
+            }
+
+            /* 4. Button Container */
+            .role-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            /* 5. Button Styling */
+            .btn {
+                padding: 14px 20px;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                text-decoration: none;
+                color: white;
+                /* Add subtle darkness to button backgrounds */
+                box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            }
+
+            /* Specific Colors - Adjusted for Dark Mode */
+            .btn-admin {
+                background-color: #c0392b; /* Deep Red */
+            }
+            .btn-admin:hover { background-color: #e74c3c; box-shadow: 0 0 15px rgba(231, 76, 60, 0.4); }
+
+            .btn-mentor {
+                background-color: #2980b9; /* Deep Blue */
+            }
+            .btn-mentor:hover { background-color: #3498db; box-shadow: 0 0 15px rgba(52, 152, 219, 0.4); }
+
+            .btn-mentee {
+                background-color: #27ae60; /* Deep Green */
+            }
+            .btn-mentee:hover { background-color: #2ecc71; box-shadow: 0 0 15px rgba(46, 204, 113, 0.4); }
+
+        </style>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <div class = "login-card">
+        <h1>🎓 Mentorship System</h1>
+        <p>Welcome! Please select your role to continue.</p>
+
+        <div class="role-buttons">
+            <button class="btn btn-admin" onclick="location.href='login.jsp?role=Admin'">
+                <span>⚙️</span> Admin Portal
+            </button>
+
+            <button class="btn btn-mentor" onclick="location.href='login.jsp?role=Mentor'">
+                <span>👨‍🏫</span> Mentor Access
+            </button>
+
+            <button class="btn btn-mentee" onclick="location.href='login.jsp?role=Mentee'">
+                <span>🎓</span> Mentee Login
+            </button>
+        </div>
+        <p style="margin-top: 20px; font-size: 12px; color: #aaa;">© 2025 University System</p>
+    </div>
     </body>
 </html>

@@ -5,17 +5,22 @@
  */
 package com.irssmentors.controller;
 
+import com.irssmentors.dao.AdminDAO;
+import com.irssmentors.model.Admin;
 import java.io.IOException;
-import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author nikla
  */
+@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
 
     /**
@@ -30,20 +35,38 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String role = request.getParameter("role");
+        
+        Admin admin = new Admin(username, password);
+        AdminDAO adminDao = new AdminDAO();
+        String userValidate = "";
+       
+        
+        if("Admin".equals(role)){
+            userValidate = adminDao.authenticateUser(admin);
+        }else if("Mentor".equals(role)){
+            //Mentor
+        }else  if("Mentee".equals(role)){
+            //Mentee
+        }else{
+            request.setAttribute("error","Invalid login");   
+            request.getRequestDispatcher("login.jsp").forward(request,response);
         }
+       
+        if(userValidate.equals("SUCCESS")){
+            request.setAttribute("username",username);
+            request.getRequestDispatcher("Storyboard/admin_dashboard.html").forward(request, response);
+        }
+        else
+        {
+            request.setAttribute("errMessage", userValidate);
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+        }   
     }
-
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
