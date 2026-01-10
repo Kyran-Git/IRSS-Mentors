@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -76,5 +78,39 @@ public class AdminDAO {
             e.printStackTrace();
         }
         return "Failed register";
+    }
+    
+    public List<Mentor> getMentorList(){
+        
+        List<Mentor> mentorList = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        
+        try{
+            con = DBConnection.createConnection();
+            String query = "SELECT * FROM MENTORS";
+            statement = con.prepareStatement(query);
+            resultSet = statement.executeQuery();
+            
+            while(resultSet.next()){
+                Mentor mentor = new Mentor(
+                resultSet.getString("username"),
+                resultSet.getString("password"),
+                resultSet.getString("fullname"),
+                resultSet.getString("email"),
+                resultSet.getString("phone"),
+                resultSet.getString("faculty")
+                );
+                mentorList.add(mentor);
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } catch (Exception e) {}
+            try { if (statement != null) statement.close(); } catch (Exception e) {}
+            try { if (con != null) con.close(); } catch (Exception e) {}
+        }
+        return mentorList;
     }
 }

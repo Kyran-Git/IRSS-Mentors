@@ -3,7 +3,7 @@
     Created on : Dec 14, 2025, 3:10:06 AM
     Author     : nikla
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -67,7 +67,7 @@
                 <div class="card">
                     <h3>👥 Create Mentors</h3>
                     <p>Register new mentors</p>
-                    <form action="/IRSS-Mentors/AdminServlet" method="post">
+                    <form action="/IRSS-Mentors/CreateMentorServlet" method="post">
                         <table>
                             <tr>
                                 <td>Username:</td>
@@ -105,39 +105,32 @@
                 <div class="card">
                     <h3>👥 Edit Mentors</h3>
                     <p>Update profile mentors</p>
-                    <form>
-                        <table>
+                    <a href="<c:url value='/ListMentorServlet' />" class="btn-action">View List</a>
+                    <c:if test="${not empty mentorList}">
+                        <table border="1">
                             <tr>
-                                <td>Username:</td>
-                                <td><input type="text" name="mentorUsername"></td>
+                                <th>Username</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Faculty</th>
+                                <th>Action</th>
                             </tr>
-                            <tr>
-                                <td>Password:</td>
-                                <td><input type="text" name="mentorPassword"></td>
-                            </tr>
-                            <tr>
-                                <td>Full Name:</td>
-                                <td><input type="text" name="mentorFullname"></td>
-                            </tr>
-                            <tr>
-                                <td>Email:</td>
-                                <td><input type="text" name="mentorEmail"></td>
-                            </tr>
-                            <tr>
-                                <td>Phone Number:</td>
-                                <td><input type="text" name="mentorPhone"></td>
-                            </tr>
-                            <tr>
-                                <td>Faculty:</td>
-                                <td><input type="text" name="mentorFaculty"></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><input type="submit" value="Edit" class="btn-action"></td>
-                            </tr>
-                            
+
+                            <c:forEach var="mentor" items="${mentorList}">
+                                <tr>
+                                    <td>${mentor.username}</td>
+                                    <td>${mentor.fullname}</td>
+                                    <td>${mentor.email}</td>
+                                    <td>${mentor.phone}</td>
+                                    <td>${mentor.faculty}</td>
+                                    <td>
+                                        <a href="EditMentorServlet?username=${mentor.username}">Edit</a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
                         </table>
-                    </form>
+                    </c:if>
                 </div>
 
                 <div class="card">
