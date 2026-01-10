@@ -6,8 +6,10 @@
 package com.irssmentors.dao;
 
 import com.irssmentors.model.Admin;
+import com.irssmentors.model.Mentor;
 import com.irssmentors.utility.DBConnection;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -44,5 +46,35 @@ public class AdminDAO {
             e.printStackTrace();
         }
         return "Invalid user credentials";
+    }
+    
+    public String registerNewMentor(Mentor mentor){
+        
+        String username = mentor.getUsername();
+        String password = mentor.getPassword();
+        String mentorFullname = mentor.getFullname();
+        String mentorEmail = mentor.getEmail();
+        String mentorPhone = mentor.getPhone();
+        String mentorFaculty = mentor.getFaculty();
+        
+        Connection con = null;
+        
+        try{
+            con = DBConnection.createConnection();
+            String query = "INSERT INTO MENTORS (username, password, fullname, email, phone, faculty) VALUES (?,?,?,?,?,?)";
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.setString(3, mentorFullname);
+            stmt.setString(4, mentorEmail);
+            stmt.setString(5, mentorPhone);
+            stmt.setString(6, mentorFaculty);
+            stmt.executeUpdate();
+            con.close();
+            return "SUCCESS";
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return "Failed register";
     }
 }

@@ -58,7 +58,7 @@ public class LoginServlet extends HttpServlet {
        
         if(userValidate.equals("SUCCESS")){
             request.setAttribute("username",username);
-            request.getRequestDispatcher("Storyboard/admin_dashboard.html").forward(request, response);
+            request.getRequestDispatcher("admin/adminDashboard.jsp").forward(request, response);
         }
         else
         {

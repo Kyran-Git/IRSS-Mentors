@@ -9,9 +9,79 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Admin Dashboard</title>
+        <style>
+            /* Shared Dark Theme */
+            body {
+                margin: 0; font-family: 'Segoe UI', sans-serif;
+                background-color: #1e2024; color: white;
+            }
+
+            /* Navbar */
+            .navbar {
+                background-color: #2d3436; padding: 15px 30px;
+                display: flex; justify-content: space-between; align-items: center;
+                border-bottom: 1px solid #444;
+            }
+            .navbar h2 { margin: 0; color: #e74c3c; /* Red for Admin */ }
+            .btn-logout {
+                padding: 8px 15px; background-color: #c0392b; color: white;
+                text-decoration: none; border-radius: 5px; font-size: 14px;
+            }
+
+            /* Main Content Grid */
+            .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
+            .dashboard-grid {
+                display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px; margin-top: 20px;
+            }
+
+            /* Action Cards */
+            .card {
+                background-color: #2d3436; padding: 25px; border-radius: 10px;
+                text-align: center; border: 1px solid #444; transition: 0.3s;
+            }
+            .card:hover { transform: translateY(-5px); border-color: #e74c3c; }
+            .card h3 { margin-top: 0; }
+            .card p { color: #b2bec3; font-size: 14px; }
+
+            .btn-action {
+                display: inline-block; margin-top: 15px; padding: 10px 20px;
+                background-color: #444; color: white; text-decoration: none;
+                border-radius: 5px; transition: 0.3s;
+            }
+            .btn-action:hover { background-color: #e74c3c; }
+        </style>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <div class="navbar">
+            <h2>⚙️ Admin Portal</h2>
+            <a href="index.jsp" class="btn-logout">Logout</a>
+        </div>
+
+        <div class="container">
+            <h1>Welcome, Admin</h1>
+            <p style="color: #b2bec3;">System Overview</p>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>👥 Manage Mentors</h3>
+                    <p>Register new mentors or update profiles.</p>
+                    <a href="admin/manageMentors.jsp" class="btn-action">View Mentors</a>
+                </div>
+
+                <div class="card">
+                    <h3>🎓 Manage Mentees</h3>
+                    <p>View student list and assign mentors.</p>
+                    <a href="admin/manageMentees.jsp" class="btn-action">Assign Students</a>
+                </div>
+
+                <div class="card">
+                    <h3>📊 Performance Reports</h3>
+                    <p>Review overall CGPA statistics.</p>
+                    <a href="#" class="btn-action">View Reports</a>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
