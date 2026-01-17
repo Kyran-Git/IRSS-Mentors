@@ -55,15 +55,21 @@ public class EditMentorServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
         String username = request.getParameter("mentorUsername");
-        String password = request.getParameter("mentorPassword");
-        String fullname = request.getParameter("mentorFullname");
-        String email = request.getParameter("mentorEmail");
-        String phone = request.getParameter("mentorPhone");
-        String faculty = request.getParameter("mentorFaculty");
-
         AdminDAO adminDao = new AdminDAO();
-        adminDao.setMentor(username, password, fullname, email, phone, faculty);
+
+        if ("Delete".equals(action)) {
+            adminDao.deleteMentor(username);
+        } else {
+            String password = request.getParameter("mentorPassword");
+            String fullname = request.getParameter("mentorFullname");
+            String email = request.getParameter("mentorEmail");
+            String phone = request.getParameter("mentorPhone");
+            String faculty = request.getParameter("mentorFaculty");
+
+            adminDao.setMentor(username, password, fullname, email, phone, faculty);
+        }
 
         response.sendRedirect("ListMentorServlet");
     }

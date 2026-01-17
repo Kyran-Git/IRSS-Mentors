@@ -71,27 +71,27 @@
                         <table>
                             <tr>
                                 <td>Username:</td>
-                                <td><input type="text" name="mentorUsername"></td>
+                                <td><input type="text" name="mentorUsername" placeholder="Enter username..." required></td>
                             </tr>
                             <tr>
                                 <td>Password:</td>
-                                <td><input type="text" name="mentorPassword"></td>
+                                <td><input type="text" name="mentorPassword" placeholder="Enter password..." required></td>
                             </tr>
                             <tr>
                                 <td>Full Name:</td>
-                                <td><input type="text" name="mentorFullname"></td>
+                                <td><input type="text" name="mentorFullname" placeholder="Enter full name..." required></td>
                             </tr>
                             <tr>
                                 <td>Email:</td>
-                                <td><input type="text" name="mentorEmail"></td>
+                                <td><input type="text" name="mentorEmail" placeholder="Enter email" required></td>
                             </tr>
                             <tr>
                                 <td>Phone Number:</td>
-                                <td><input type="text" name="mentorPhone"></td>
+                                <td><input type="text" name="mentorPhone" placeholder="Enter phone number..." required></td>
                             </tr>
                             <tr>
                                 <td>Faculty:</td>
-                                <td><input type="text" name="mentorFaculty"></td>
+                                <td><input type="text" name="mentorFaculty" placeholder="Enter faculty..." required></td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -102,8 +102,8 @@
                 </div>
 
                 <div class="card">
-                    <h3>👥 Mentors List</h3>
-                    <p>View all profile mentors</p>
+                    <h3>👥 Mentor List</h3>
+                    <p>View all profile mentor</p>
                     <a href="<c:url value='/ListMentorServlet' />" class="btn-action">View List</a>
                     <c:if test="${not empty mentorList}">
                         <table border="1">
@@ -130,7 +130,7 @@
 
                 <div class="card">
                     <h3>👥 Edit Mentor</h3>
-                    <p>Update profile mentor</p>
+                    <p>Update or Delete profile mentor</p>
                     <c:choose>
                         <c:when test="${empty selectedMentor}">
                             <form action="EditMentorServlet" method="get">
@@ -177,10 +177,11 @@
                                     <tr>
                                         <td></td>
                                         <td>
-                                            <input type="submit" value="Update Data" class="btn-action">
-                                            <a href="ListMentorServlet" class="btn-action">Cancel</a>
+                                            <button type="submit" name="action" value="Update" class="btn-action">Update</button>
+                                            <button type="submit" name="action" value="Delete" class="btn-action" onclick="return confirm('Are you sure you want to delete this mentor?');">Remove</button>
                                         </td>
-                                    </tr> 
+                                    </tr>
+                                        <a href="ListMentorServlet" class="btn-action">Cancel</a> 
                                 </table>
                             </form>
                         </c:otherwise>

@@ -163,4 +163,23 @@ public class AdminDAO {
         }
         return getMentorList();
     }
+    
+    public String deleteMentor(String username) {
+        Connection con = null;
+        PreparedStatement statement = null;
+        try {
+            con = DBConnection.createConnection();
+            String query = "DELETE FROM MENTORS WHERE username = ?";
+            statement = con.prepareStatement(query);
+            statement.setString(1, username);
+
+            int result = statement.executeUpdate();
+            if (result > 0) return "SUCCESS";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { if (con != null) con.close(); } catch (Exception e) {}
+        }
+        return "FAILURE";
+    }
 }
