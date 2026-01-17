@@ -117,7 +117,7 @@ public class AdminDAO {
     public List<Mentor> searchMentorsByName(String name) {
         List<Mentor> mentorList = new ArrayList<>();
         try (Connection con = DBConnection.createConnection()) {
-            // Search by fullname using partial matches
+ 
             String query = "SELECT * FROM MENTORS WHERE fullname LIKE ?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, "%" + name + "%");
@@ -133,6 +133,34 @@ public class AdminDAO {
                     rs.getString("faculty")
                 );
                 mentorList.add(mentor);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return mentorList;
+    }
+    
+    public List<Mentor> getSortedMentorList(String column) {
+        List<Mentor> mentorList = new ArrayList<>();
+
+        String orderBy = "fullname"; 
+        if ("faculty".equals(column)) { orderBy = "faculty"; }
+
+        String query = "SELECT * FROM MENTORS ORDER BY " + orderBy + " ASC";
+
+        try (Connection con = DBConnection.createConnection();
+             Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                mentorList.add(new Mentor(
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("fullname"),
+                    rs.getString("email"),
+                    rs.getString("phone"),
+                    rs.getString("faculty")
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace();

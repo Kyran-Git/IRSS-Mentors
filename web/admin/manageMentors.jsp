@@ -109,22 +109,27 @@
                         <%-- Show List View Mode --%>
                         <c:when test="${showList}">
 
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 10px; flex-wrap: wrap;">
-
-                                <div style="display: flex; gap: 10px;">
-                                    <form action="ListMentorServlet" method="get">
-                                        <input type="hidden" name="sort" value="name">
-                                        <button type="submit" class="btn-action">Sort by Name</button>
-                                    </form>
-
-                                    <a href="admin/manageMentors.jsp" class="btn-action">Cancel</a>
-                                </div>
-
-                                <form action="ListMentorServlet" method="get">
-                                    <input type="text" name="searchName" value="${param.searchName}" placeholder="Search by name..." >
-                                    <button type="submit" class="btn-action">Search</button>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        
+                            <div style="display: flex; gap: 10px;">
+                                <form action="ListMentorServlet" method="get" style="margin: 0;">
+                                    <input type="hidden" name="sortBy" value="${nextSort}">
+                                    <button type="submit" class="btn-action">
+                                        <c:choose>
+                                            <c:when test="${param.sortBy == 'fullname'}">Sort by Faculty</c:when>
+                                            <c:otherwise>Sort by Name</c:otherwise>
+                                        </c:choose>
+                                    </button>
                                 </form>
+
+                                <a href="admin/manageMentors.jsp" class="btn-action">Cancel</a>
                             </div>
+
+                            <form action="ListMentorServlet" method="get">
+                                <input type="text" name="searchName" value="${param.searchName}" placeholder="Search by name...">
+                                <button type="submit" class="btn-action">Search</button>
+                            </form>
+                        </div>
 
                             <div style="margin-top: 10px; overflow-x: auto;">
                                 <c:choose>
