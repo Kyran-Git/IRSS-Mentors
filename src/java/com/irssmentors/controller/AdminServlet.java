@@ -5,8 +5,6 @@
  */
 package com.irssmentors.controller;
 
-import com.irssmentors.dao.AdminDAO;
-import com.irssmentors.model.Mentor;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -20,28 +18,29 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AdminServlet extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        String mentorUsername = request.getParameter("mentorUsername");
-        String mentorPassword = request.getParameter("mentorPassword");
-        String mentorFullname = request.getParameter("mentorFullname");
-        String mentorEmail = request.getParameter("mentorEmail");
-        String mentorPhone = request.getParameter("mentorPhone");
-        String mentorFaculty = request.getParameter("mentorFaculty");
-        
-        Mentor mentor = new Mentor(mentorUsername,mentorPassword,mentorFullname,mentorEmail,mentorPhone,mentorFaculty);
-        AdminDAO adminDAO = new AdminDAO();
-        String userValidate = adminDAO.registerNewMentor(mentor);
-        
-        if(userValidate.equals("SUCCESS")){
-            request.getRequestDispatcher("admin/adminDashboard.jsp").forward(request, response);
-        }
-        else
-        {
-            request.setAttribute("errMessage", userValidate);
-            request.getRequestDispatcher("Storyboard/index.html").forward(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet MentorServlet</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet MentorServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 

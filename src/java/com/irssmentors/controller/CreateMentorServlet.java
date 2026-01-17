@@ -29,7 +29,7 @@ public class CreateMentorServlet extends HttpServlet {
         String userValidate = adminDAO.registerNewMentor(mentor);
         
         if(userValidate.equals("SUCCESS")){
-            request.getRequestDispatcher("admin/adminDashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("admin/manageMentors.jsp").forward(request, response);
         }
         else
         {

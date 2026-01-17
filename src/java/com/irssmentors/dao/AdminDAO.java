@@ -113,4 +113,54 @@ public class AdminDAO {
         }
         return mentorList;
     }
+    
+    public Mentor getMentorByUsername(String username) {
+    Mentor mentor = null;
+    try (Connection con = DBConnection.createConnection()) {
+        String query = "SELECT * FROM MENTORS WHERE username = ?";
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            mentor = new Mentor(
+                rs.getString("username"),
+                rs.getString("password"),
+                rs.getString("fullname"),
+                rs.getString("email"),
+                rs.getString("phone"),
+                rs.getString("faculty")
+            );
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return mentor;
+}
+    
+    public List<Mentor> setMentor(String username, String password, String fullname, String email, String phone, String faculty){
+        
+        Connection con = null;
+        PreparedStatement statement = null;
+        
+        try{
+            con = DBConnection.createConnection(); 
+            String query = "UPDATE MENTORS SET password=?, fullname=?, email=?, phone=?, faculty=? WHERE username=?";
+            statement = con.prepareStatement(query);
+            
+            statement.setString(1,password);
+            statement.setString(2,fullname);
+            statement.setString(3,email);
+            statement.setString(4,phone);
+            statement.setString(5,faculty);
+            statement.setString(6,username);
+            
+            statement.executeUpdate();
+   
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            try { if (con != null) con.close();} catch (Exception e) {}
+        }
+        return getMentorList();
+    }
 }

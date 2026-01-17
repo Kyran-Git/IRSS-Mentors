@@ -65,8 +65,8 @@
 
             <div class="dashboard-grid">
                 <div class="card">
-                    <h3>👥 Create Mentors</h3>
-                    <p>Register new mentors</p>
+                    <h3>👥 Create Mentor</h3>
+                    <p>Register new mentor</p>
                     <form action="/IRSS-Mentors/CreateMentorServlet" method="post">
                         <table>
                             <tr>
@@ -96,15 +96,14 @@
                             <tr>
                                 <td></td>
                                 <td><input type="submit" value="Register" class="btn-action"></td>
-                            </tr>
-                            
+                            </tr> 
                         </table>
                     </form>
                 </div>
 
                 <div class="card">
-                    <h3>👥 Edit Mentors</h3>
-                    <p>Update profile mentors</p>
+                    <h3>👥 Mentors List</h3>
+                    <p>View all profile mentors</p>
                     <a href="<c:url value='/ListMentorServlet' />" class="btn-action">View List</a>
                     <c:if test="${not empty mentorList}">
                         <table border="1">
@@ -114,7 +113,6 @@
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Faculty</th>
-                                <th>Action</th>
                             </tr>
 
                             <c:forEach var="mentor" items="${mentorList}">
@@ -123,10 +121,7 @@
                                     <td>${mentor.fullname}</td>
                                     <td>${mentor.email}</td>
                                     <td>${mentor.phone}</td>
-                                    <td>${mentor.faculty}</td>
-                                    <td>
-                                        <a href="EditMentorServlet?username=${mentor.username}">Edit</a>
-                                    </td>
+                                    <td>${mentor.faculty}</td>  
                                 </tr>
                             </c:forEach>
                         </table>
@@ -134,9 +129,62 @@
                 </div>
 
                 <div class="card">
-                    <h3>📊 Performance Reports</h3>
-                    <p>Review overall CGPA statistics.</p>
-                    <a href="#" class="btn-action">View Reports</a>
+                    <h3>👥 Edit Mentor</h3>
+                    <p>Update profile mentor</p>
+                    <c:choose>
+                        <c:when test="${empty selectedMentor}">
+                            <form action="EditMentorServlet" method="get">
+                                <table>
+                                    <tr>
+                                        <td>Username:</td>
+                                        <td><input type="text" name="username" placeholder="Enter username..." required></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td><input type="submit" value="Find Mentor" class="btn-action"></td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </c:when>
+
+                        <c:otherwise>
+                            <form action="EditMentorServlet" method="post">
+                                <table>
+                                    <tr>
+                                        <td>Username:</td>
+                                        <td><input type="text" name="mentorUsername" value="${selectedMentor.username}" readonly></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Password:</td>
+                                        <td><input type="text" name="mentorPassword" value="${selectedMentor.password}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Full Name:</td>
+                                        <td><input type="text" name="mentorFullname" value="${selectedMentor.fullname}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email:</td>
+                                        <td><input type="text" name="mentorEmail" value="${selectedMentor.email}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phone Number:</td>
+                                        <td><input type="text" name="mentorPhone" value="${selectedMentor.phone}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Faculty:</td>
+                                        <td><input type="text" name="mentorFaculty" value="${selectedMentor.faculty}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <input type="submit" value="Update Data" class="btn-action">
+                                            <a href="ListMentorServlet" class="btn-action">Cancel</a>
+                                        </td>
+                                    </tr> 
+                                </table>
+                            </form>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
