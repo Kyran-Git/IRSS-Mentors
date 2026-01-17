@@ -104,28 +104,62 @@
                 <div class="card">
                     <h3>👥 Mentor List</h3>
                     <p>View all profile mentor</p>
-                    <a href="<c:url value='/ListMentorServlet' />" class="btn-action">View List</a>
-                    <c:if test="${not empty mentorList}">
-                        <table border="1">
-                            <tr>
-                                <th>Username</th>
-                                <th>Full Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Faculty</th>
-                            </tr>
 
-                            <c:forEach var="mentor" items="${mentorList}">
-                                <tr>
-                                    <td>${mentor.username}</td>
-                                    <td>${mentor.fullname}</td>
-                                    <td>${mentor.email}</td>
-                                    <td>${mentor.phone}</td>
-                                    <td>${mentor.faculty}</td>  
-                                </tr>
-                            </c:forEach>
-                        </table>
-                    </c:if>
+                    <c:choose>
+                        <%-- Show List View Mode --%>
+                        <c:when test="${showList}">
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 10px; flex-wrap: wrap;">
+
+                                <div style="display: flex; gap: 10px;">
+                                    <form action="ListMentorServlet" method="get">
+                                        <input type="hidden" name="sort" value="name">
+                                        <button type="submit" class="btn-action">Sort by Name</button>
+                                    </form>
+
+                                    <a href="admin/manageMentors.jsp" class="btn-action">Cancel</a>
+                                </div>
+
+                                <form action="ListMentorServlet" method="get">
+                                    <input type="text" name="searchName" value="${param.searchName}" placeholder="Search by name..." >
+                                    <button type="submit" class="btn-action">Search</button>
+                                </form>
+                            </div>
+
+                            <div style="margin-top: 10px; overflow-x: auto;">
+                                <c:choose>
+                                    <c:when test="${not empty mentorList}">
+                                        <table border="1" style="width: 100%; border-collapse: collapse;">
+                                            <tr style="background-color: #e74c3c;">
+                                                <th>Username</th>
+                                                <th>Full Name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Faculty</th>
+                                            </tr>
+                                            <c:forEach var="mentor" items="${mentorList}">
+                                                <tr>
+                                                    <td>${mentor.username}</td>
+                                                    <td>${mentor.fullname}</td>
+                                                    <td>${mentor.email}</td>
+                                                    <td>${mentor.phone}</td>
+                                                    <td>${mentor.faculty}</td>  
+                                                </tr>
+                                            </c:forEach>
+                                        </table>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <p style="color: #e74c3c; margin-top: 20px;">No mentors found matching "${param.searchName}".</p>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </c:when>
+
+                        <%-- Initial View Mode --%>
+                        <c:otherwise>
+                            <a href="<c:url value='/ListMentorServlet' />" class="btn-action">View List</a>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <div class="card">

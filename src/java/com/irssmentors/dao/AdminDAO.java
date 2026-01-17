@@ -114,6 +114,32 @@ public class AdminDAO {
         return mentorList;
     }
     
+    public List<Mentor> searchMentorsByName(String name) {
+        List<Mentor> mentorList = new ArrayList<>();
+        try (Connection con = DBConnection.createConnection()) {
+            // Search by fullname using partial matches
+            String query = "SELECT * FROM MENTORS WHERE fullname LIKE ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Mentor mentor = new Mentor(
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("fullname"),
+                    rs.getString("email"),
+                    rs.getString("phone"),
+                    rs.getString("faculty")
+                );
+                mentorList.add(mentor);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return mentorList;
+    }
+    
     public Mentor getMentorByUsername(String username) {
     Mentor mentor = null;
     try (Connection con = DBConnection.createConnection()) {
