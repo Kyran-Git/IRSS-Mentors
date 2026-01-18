@@ -5,6 +5,13 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    // SECURITY LOCK: Only allow if session is Admin
+    if(session.getAttribute("adminSession") == null) {
+        response.sendRedirect("../login.jsp?role=admin"); // Kick them out
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -56,7 +63,7 @@
     <body>
         <div class="navbar">
             <h2>⚙️ Admin Portal</h2>
-            <a href="index.jsp" class="btn-logout">Logout</a>
+            <a href="${pageContext.request.contextPath}/LogoutServlet" class="btn-logout">Logout</a>
         </div>
 
         <div class="container">

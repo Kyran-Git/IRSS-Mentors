@@ -43,10 +43,10 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             admin.setPassword(password);
             
             // Check credentials
-            String result = adminDAO.authenticateUser(admin);
-            
-            if (result.equals("SUCCESS")) {
+            if (adminDAO.authenticateUser(admin).equals("SUCCESS")) {
+                // Set Session
                 session.setAttribute("adminSession", admin);
+                session.setAttribute("userRole", "admin");
                 
                 response.sendRedirect("admin/adminDashboard.jsp"); 
             } else {
@@ -61,7 +61,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             
             if (mentor != null) {
                 session.setAttribute("mentorSession", mentor);
-                response.sendRedirect("mentor/mentorDashboard.jsp");
+                response.sendRedirect("MentorServlet?action=dashboard");
             } else {
                 request.setAttribute("errMessage", "Invalid Mentor Credentials");
                 request.getRequestDispatcher("login.jsp").forward(request, response);

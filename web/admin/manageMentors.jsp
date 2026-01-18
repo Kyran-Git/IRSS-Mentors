@@ -1,6 +1,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
+    // SECURITY LOCK: Only allow if session is Admin
+    if(session.getAttribute("adminSession") == null) {
+        response.sendRedirect("../login.jsp?role=admin"); // Kick them out
+        return;
+    }
+%>
+<%
     // FAILSAFE: If accessed directly, load the list automatically
     if(request.getAttribute("mentorList") == null) {
         com.irssmentors.dao.AdminDAO tempDao = new com.irssmentors.dao.AdminDAO();

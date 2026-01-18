@@ -38,62 +38,62 @@ public class MentorServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String action = request.getParameter("action");
         HttpSession session = request.getSession();
         Mentor currentMentor = (Mentor) session.getAttribute("mentorSession");
-
+        
+        // Security Check
         if (currentMentor == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("login.jsp?role=mentor");
             return;
         }
+        
+        String action = request.getParameter("action");
+        if(action == null) action = "dashboard";
+        
+        MentorDAO mentorDAO = new MentorDAO();
+        MentorTimetableDAO timetableDAO = new MentorTimetableDAO();
 
-        if (action == null) action = "dashboard";
-
-        switch (action) {
+        switch(action) {
             case "dashboard":
-                MentorDAO mentorDAO = new MentorDAO();
-                List<Mentee> menteeList = mentorDAO.getMenteesByMentor(currentMentor.getMentorID());
-                request.setAttribute("menteeList", menteeList);
+                List<Mentee> mentees = mentorDAO.getMenteesByMentor(currentMentor.getMentorID());
+                request.setAttribute("menteeList", mentees);
                 request.getRequestDispatcher("mentor/mentorDashboard.jsp").forward(request, response);
                 break;
-
+                
             case "viewTimetable":
-                MentorTimetableDAO timeDAO = new MentorTimetableDAO();
-                List<MentorTimetable> timetable = timeDAO.getTimetable(currentMentor.getMentorID());
-                request.setAttribute("timetable", timetable);
+                // 1. Get List from DAO
+                List<MentorTimetable> timetable = timetableDAO.getTimetable(currentMentor.getMentorID());
+                
+                // 2. Set as Attribute (Must match the name used in JSP <c:forEach>)
+                request.setAttribute("timetableList", timetable);
+                
+                // 3. Forward to JSP
                 request.getRequestDispatcher("mentor/timetable.jsp").forward(request, response);
                 break;
-
+                
             case "addSlot":
-                String day = request.getParameter("day");
-                String time = request.getParameter("time");
+                String day = request.getParameter("availableDay");
+                String time = request.getParameter("availableTime");
                 
-                MentorTimetable newSlot = new MentorTimetable();
-                newSlot.setMentorID(currentMentor.getMentorID());
-                newSlot.setAvailableDay(day);
-                newSlot.setAvailableTime(time);
+                MentorTimetable slot = new MentorTimetable();
+                slot.setMentorID(currentMentor.getMentorID());
+                slot.setAvailableDay(day);
+                slot.setAvailableTime(time);
                 
-                new MentorTimetableDAO().addSlot(newSlot);
+                timetableDAO.addSlot(slot);
+                
+                // Redirect back to viewTimetable to refresh the list
                 response.sendRedirect("MentorServlet?action=viewTimetable");
                 break;
-
+                
             case "removeSlot":
-                String idToRemove = request.getParameter("id");
-                new MentorTimetableDAO().removeSlot(idToRemove);
+                String id = request.getParameter("id");
+                timetableDAO.removeSlot(id);
                 response.sendRedirect("MentorServlet?action=viewTimetable");
-                break;
-                
-            case "viewMenteePerformance":
-                response.sendRedirect("MentorServlet?action=dashboard");
-                break;
-
-            case "logout":
-                session.invalidate();
-                response.sendRedirect("login.jsp");
                 break;
         }
     }
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
