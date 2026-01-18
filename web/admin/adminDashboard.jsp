@@ -67,7 +67,7 @@
                 <div class="card">
                     <h3>👥 Manage Mentors</h3>
                     <p>Register new mentors or update profiles.</p>
-                    <a href="admin/manageMentors.jsp" class="btn-action">View Mentors</a>
+                    <a href="${pageContext.request.contextPath}/ListMentorServlet" class="btn-action">View Mentors</a>
                 </div>
 
                 <div class="card">

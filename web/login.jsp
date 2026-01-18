@@ -58,12 +58,32 @@
     <body>
         <div class="login-card">
         
-        <form action="/IRSS-Mentors/LoginServlet" method="post">
-            <input type="hidden" name="role" value="${param.role}">
-            <input type="text" placeholder="Username" name="username" required>
-            <input type="password" placeholder="Password" name="password" required>
-            <input type="submit" value="Login">
+        <!-- Simplified login.jsp snippet -->
+        <form action="LoginServlet" method="POST">
+
+            <label>Login As:</label>
+            <select name="role">
+                <option value="admin">Admin</option>
+                <option value="mentor">Mentor</option>
+                <option value="mentee">Mentee</option>
+            </select>
+            <br><br>
+
+            <label>Username:</label>
+            <input type="text" name="username" required>
+            <br><br>
+
+            <label>Password:</label>
+            <input type="password" name="password" required>
+            <br><br>
+
+            <button type="submit">Login</button>
         </form>
+
+        <!-- Show Error if exists -->
+        <% if(request.getAttribute("errMessage") != null) { %>
+            <p style="color:red;"><%= request.getAttribute("errMessage") %></p>
+        <% } %>
     
         <div class="links">
             <a href="#" onclick="alert('Reset password feature coming soon!')">Forgot Password?</a>

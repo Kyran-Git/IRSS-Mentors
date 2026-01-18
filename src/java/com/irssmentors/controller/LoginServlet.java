@@ -7,6 +7,8 @@ package com.irssmentors.controller;
 
 import com.irssmentors.dao.AdminDAO;
 import com.irssmentors.model.Admin;
+import com.irssmentors.dao.MentorDAO;
+import com.irssmentors.model.Mentor;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -23,87 +25,52 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         
+        // 1. Get Form Data
+        String role = request.getParameter("role"); // Ensure your HTML select/radio has name="role"
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        String role = request.getParameter("role");
         
-        Admin admin = new Admin(username, password);
-        AdminDAO adminDao = new AdminDAO();
-        String userValidate = "";
-       
-        
-        if("Admin".equals(role)){
-            userValidate = adminDao.authenticateUser(admin);
-        }else if("Mentor".equals(role)){
-            //Mentor
-        }else  if("Mentee".equals(role)){
-            //Mentee
-        }else{
-            request.setAttribute("error","Invalid login");   
-            request.getRequestDispatcher("login.jsp").forward(request,response);
+        HttpSession session = request.getSession();
+
+        // 2. Route based on Role
+        if ("admin".equalsIgnoreCase(role)) {
+            Admin admin = new Admin(username, password);
+            AdminDAO adminDAO = new AdminDAO();
+            admin.setUsername(username);
+            admin.setPassword(password);
+            
+            // Check credentials
+            String result = adminDAO.authenticateUser(admin);
+            
+            if (result.equals("SUCCESS")) {
+                session.setAttribute("adminSession", admin);
+                
+                response.sendRedirect("admin/adminDashboard.jsp"); 
+            } else {
+                // Login Failed
+                request.setAttribute("errMessage", "Invalid Admin Credentials");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+            
+        } else if ("mentor".equalsIgnoreCase(role)) {
+            MentorDAO mentorDAO = new MentorDAO();
+            Mentor mentor = mentorDAO.login(username, password);
+            
+            if (mentor != null) {
+                session.setAttribute("mentorSession", mentor);
+                response.sendRedirect("mentor/mentorDashboard.jsp");
+            } else {
+                request.setAttribute("errMessage", "Invalid Mentor Credentials");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+            
+        } else {
+            // Default or Mentee logic here
+            request.setAttribute("errMessage", "Please select a valid role.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
-       
-        if(userValidate.equals("SUCCESS")){
-            request.setAttribute("username",username);
-            request.getRequestDispatcher("admin/adminDashboard.jsp").forward(request, response);
-        }
-        else
-        {
-            request.setAttribute("errMessage", userValidate);
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
-        }   
     }
-    
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

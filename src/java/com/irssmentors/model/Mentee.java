@@ -23,22 +23,6 @@ public class Mentee implements Serializable{
     private String menteeStatus;
     private String mentorID; //Foreign key
     
-    public Mentee(){
-        
-    }
-    
-    public Mentee(String menteeID, String menteeFullname, String menteeEmail, String menteePhone, 
-            String menteeProgramme, int menteeSemester, float menteeCgpa, String menteeStatus, String mentorID){
-        this.menteeID=menteeID;
-        this.menteeFullname=menteeFullname;
-        this.menteeEmail=menteeEmail;
-        this.menteePhone=menteePhone;
-        this.menteeProgramme=menteeProgramme;
-        this.menteeSemester=menteeSemester;
-        this.menteeCgpa=menteeCgpa;
-        this.menteeStatus=menteeStatus;
-        this.mentorID=mentorID;
-    }
     
     //getters
     public String getMenteeID(){
