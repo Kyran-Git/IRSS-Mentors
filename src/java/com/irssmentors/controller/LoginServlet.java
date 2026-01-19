@@ -7,6 +7,8 @@ package com.irssmentors.controller;
 
 import com.irssmentors.dao.AdminDAO;
 import com.irssmentors.model.Admin;
+import com.irssmentors.dao.MenteeDAO;
+import com.irssmentors.model.Mentee;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -42,6 +44,9 @@ public class LoginServlet extends HttpServlet {
         
         Admin admin = new Admin(username, password);
         AdminDAO adminDao = new AdminDAO();
+        
+        Mentee mentee = new Mentee(username, password);
+        MenteeDAO menteeDao = new MenteeDAO();
         String userValidate = "";
        
         
@@ -50,7 +55,7 @@ public class LoginServlet extends HttpServlet {
         }else if("Mentor".equals(role)){
             //Mentor
         }else  if("Mentee".equals(role)){
-            //Mentee
+            userValidate = menteeDao.authenticateUser(mentee);
         }else{
             request.setAttribute("error","Invalid login");   
             request.getRequestDispatcher("login.jsp").forward(request,response);
