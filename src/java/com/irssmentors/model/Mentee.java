@@ -14,6 +14,8 @@ import java.io.Serializable;
 public class Mentee implements Serializable{
     
     private String menteeID;
+    private String username;
+    private String password;
     private String menteeFullname;
     private String menteeEmail;
     private String menteePhone;
@@ -27,9 +29,11 @@ public class Mentee implements Serializable{
         
     }
     
-    public Mentee(String menteeID, String menteeFullname, String menteeEmail, String menteePhone, 
+    public Mentee(String menteeID, String username, String password, String menteeFullname, String menteeEmail, String menteePhone, 
             String menteeProgramme, int menteeSemester, float menteeCgpa, String menteeStatus, String mentorID){
         this.menteeID=menteeID;
+        this.username = username;
+        this.password = password;
         this.menteeFullname=menteeFullname;
         this.menteeEmail=menteeEmail;
         this.menteePhone=menteePhone;
@@ -40,9 +44,20 @@ public class Mentee implements Serializable{
         this.mentorID=mentorID;
     }
     
+    public Mentee(String username, String password){
+        this.username = username;
+        this.password = password;
+    }
+    
     //getters
     public String getMenteeID(){
         return menteeID;
+    }
+    public String getUsername(){
+        return username;
+    }
+    public String getPassword(){
+        return password;
     }
     public String getMenteeFullname(){
         return menteeFullname;
@@ -72,6 +87,12 @@ public class Mentee implements Serializable{
     //setters
     public void setMenteeID(String menteeID){
         this.menteeID = menteeID;
+    }
+    public void setUsername(String username){
+        this.username=username;
+    }
+    public void setPassword(String password){
+        this.password=password;
     }
     public void setMenteeFullname(String menteeFullname){
         this.menteeFullname = menteeFullname;
