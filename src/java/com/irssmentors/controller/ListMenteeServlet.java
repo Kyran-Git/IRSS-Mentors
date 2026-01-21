@@ -15,17 +15,17 @@ public class ListMenteeServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+       
         AdminDAO adminDAO = new AdminDAO();
 
-        // 1. HANDLE ASSIGNMENT (POST data usually, but handled here via processRequest)
+        // 1. HANDLE ASSIGNMENT
         String menteeID = request.getParameter("menteeID");
         String mentorID = request.getParameter("mentorID");
         if (menteeID != null && mentorID != null) {
             adminDAO.assignMentorToMentee(menteeID, mentorID);
         }
 
-        // 2. GET PARAMETERS FOR SEARCH, FILTER, AND SORT
+        // 2. GET PARAMETERS
         String searchName = request.getParameter("searchName");
         String filterMentorID = request.getParameter("filterMentorID");
         String sortBy = request.getParameter("sortBy");
@@ -34,24 +34,19 @@ public class ListMenteeServlet extends HttpServlet {
 
         // 3. LOGIC LADDER (Prioritizes Search > Filter > Sort > Default)
         if (searchName != null && !searchName.trim().isEmpty()) {
-            // Search by Name
             menteeList = adminDAO.searchMenteesByName(searchName);
         } 
         else if (filterMentorID != null && !filterMentorID.trim().isEmpty()) {
-            // Filter by specific Mentor
             menteeList = adminDAO.getMenteesByMentor(filterMentorID);
         } 
         else if (sortBy != null && !sortBy.isEmpty()) {
-            // Sort by Column (Name, Programme, or Status)
             menteeList = adminDAO.getSortedMenteeList(sortBy);
         } 
         else {
-            // Default: List all mentees
             menteeList = adminDAO.getMenteeList();
         }
 
-        // 4. DETERMINE NEXT SORT STATE (For the toggle button)
-        // Cycles: fullname -> programme -> status -> fullname
+        // 4. NEXT SORT CYCLE (Reverted: Name -> Programme -> Status -> Name)
         String nextSort;
         if ("fullname".equals(sortBy)) {
             nextSort = "programme";
@@ -63,7 +58,7 @@ public class ListMenteeServlet extends HttpServlet {
 
         // 5. SET ATTRIBUTES AND FORWARD
         request.setAttribute("menteeList", menteeList);
-        request.setAttribute("mentorList", adminDAO.getMentorList()); // Required for dropdowns
+        request.setAttribute("mentorList", adminDAO.getMentorList());
         request.setAttribute("nextSort", nextSort);
 
         request.getRequestDispatcher("admin/manageMentees.jsp").forward(request, response);
@@ -79,10 +74,5 @@ public class ListMenteeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Controller for Managing Mentee assignments and filtering";
     }
 }

@@ -21,7 +21,7 @@ public class Mentee implements Serializable {
     private String menteePhone;
     private String menteeProgramme;
     private int menteeSemester;
-    private float menteeCgpa;
+    private double menteeCGPA;
     private String menteeStatus;
     private String mentorID; // Foreign key
 
@@ -36,19 +36,19 @@ public class Mentee implements Serializable {
         this.menteePhone = menteePhone;
         this.menteeProgramme = menteeProgramme;
         this.menteeSemester = menteeSemester;
-        this.menteeCgpa = menteeCgpa;
         this.menteeStatus = menteeStatus;
         this.mentorID = mentorID;
     }
 
     public Mentee(String menteeID, String menteeFullname, String menteeProgramme, int menteeSemester,
-            String menteeEmail, String menteePhone) {
+            String menteeEmail, String menteePhone, double menteeCGPA) {
         this.menteeID = menteeID;
         this.menteeFullname = menteeFullname;
         this.menteeProgramme = menteeProgramme;
         this.menteeSemester = menteeSemester;
         this.menteeEmail = menteeEmail;
         this.menteePhone = menteePhone;
+        this.menteeCGPA = menteeCGPA;
     }
 
     public Mentee(String username, String password) {
@@ -93,8 +93,8 @@ public class Mentee implements Serializable {
         return menteeSemester;
     }
 
-    public float getMenteeCgpa() {
-        return menteeCgpa;
+    public double getMenteeCgpa() {
+        return menteeCGPA;
     }
 
     public String getMenteeStatus() {
@@ -104,6 +104,11 @@ public class Mentee implements Serializable {
     public String getMentorID() {
         return mentorID;
     }
+    
+    public double getMenteeCGPA() {
+        return menteeCGPA;
+    }
+
 
     // setters
     public void setMenteeID(String menteeID) {
@@ -138,8 +143,8 @@ public class Mentee implements Serializable {
         this.menteeSemester = menteeSemester;
     }
 
-    public void setMenteeCgpa(float menteeCgpa) {
-        this.menteeCgpa = menteeCgpa;
+    public void setMenteeCGPA(double menteeCGPA) {
+        this.menteeCGPA = menteeCGPA;
     }
 
     public void setMenteeStatus(String menteeStatus) {
@@ -149,4 +154,5 @@ public class Mentee implements Serializable {
     public void setMentorID(String mentorID) {
         this.mentorID = mentorID;
     }
+    
 }

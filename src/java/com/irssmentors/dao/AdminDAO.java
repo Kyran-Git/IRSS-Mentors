@@ -195,7 +195,6 @@ public class AdminDAO {
         return "FAILURE";
     }
     
-    // Get all Mentees from the database
     public List<Mentee> getMenteeList() {
         List<Mentee> menteeList = new ArrayList<>();
         try (Connection con = DBConnection.createConnection()) {
@@ -210,19 +209,19 @@ public class AdminDAO {
                 m.setMenteeSemester(rs.getInt("menteeSemester"));
                 m.setMenteeEmail(rs.getString("menteeEmail"));
                 m.setMentorID(rs.getString("mentorID")); 
+                m.setMenteeCGPA(rs.getDouble("menteeCGPA")); 
+
                 menteeList.add(m);
             }
         } catch (SQLException e) { e.printStackTrace(); }
         return menteeList;
-    } // Added missing brace here
+    }
 
-    // The core assignment logic
     public boolean assignMentorToMentee(String menteeID, String mentorID) {
         try (Connection con = DBConnection.createConnection()) {
-            // We update the mentorID column for the specific student
             String query = "UPDATE Mentee SET mentorID = ? WHERE menteeID = ?";
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1, mentorID.isEmpty() ? null : mentorID); // Handle unassigning
+            ps.setString(1, mentorID.isEmpty() ? null : mentorID);
             ps.setString(2, menteeID);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -242,10 +241,8 @@ public class AdminDAO {
                 Mentee m = new Mentee();
                 m.setMenteeID(rs.getString("menteeID"));
                 m.setMenteeFullname(rs.getString("menteeFullname"));
-                m.setMenteeProgramme(rs.getString("menteeProgramme"));
-                m.setMenteeSemester(rs.getInt("menteeSemester"));
-                m.setMenteeEmail(rs.getString("menteeEmail"));
                 m.setMentorID(rs.getString("mentorID"));
+                m.setMenteeCGPA(rs.getDouble("menteeCGPA")); 
                 menteeList.add(m);
             }
         } catch (SQLException e) { e.printStackTrace(); }
@@ -255,60 +252,58 @@ public class AdminDAO {
     public List<Mentee> getSortedMenteeList(String column) {
         List<Mentee> menteeList = new ArrayList<>();
         String orderBy;
-
-        // Determine sorting logic
-        if ("programme".equals(column)) {
-            orderBy = "menteeProgramme ASC";
-        } else if ("status".equals(column)) {
-            // Group by NULL mentorIDs first, then by name
-            orderBy = "mentorID IS NOT NULL, menteeFullname ASC"; 
-        } else {
-            orderBy = "menteeFullname ASC";
-        }
+        if ("programme".equals(column)) orderBy = "menteeProgramme ASC";
+        else if ("status".equals(column)) orderBy = "mentorID IS NOT NULL, menteeFullname ASC";
+        else if ("cgpa".equals(column)) orderBy = "menteeCGPA DESC"; 
+        else orderBy = "menteeFullname ASC";
 
         String query = "SELECT * FROM Mentee ORDER BY " + orderBy;
-
         try (Connection con = DBConnection.createConnection();
              Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
-
             while (rs.next()) {
                 Mentee m = new Mentee();
                 m.setMenteeID(rs.getString("menteeID"));
                 m.setMenteeFullname(rs.getString("menteeFullname"));
                 m.setMenteeProgramme(rs.getString("menteeProgramme"));
-                m.setMenteeSemester(rs.getInt("menteeSemester"));
-                m.setMenteeEmail(rs.getString("menteeEmail"));
                 m.setMentorID(rs.getString("mentorID"));
+                m.setMenteeCGPA(rs.getDouble("menteeCGPA"));
+                menteeList.add(m);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return menteeList;
+    }
+
+    public List<Mentee> getMenteesByMentor(String mentorID) {
+        List<Mentee> menteeList = new ArrayList<>();
+        String query = "SELECT * FROM Mentee WHERE mentorID = ?";
+        try (Connection con = DBConnection.createConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, mentorID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Mentee m = new Mentee();
+                m.setMenteeID(rs.getString("menteeID"));
+                m.setMenteeFullname(rs.getString("menteeFullname"));
+                m.setMenteeProgramme(rs.getString("menteeProgramme"));
+                m.setMentorID(rs.getString("mentorID"));
+                m.setMenteeCGPA(rs.getDouble("menteeCGPA")); 
                 menteeList.add(m);
             }
         } catch (SQLException e) { e.printStackTrace(); }
         return menteeList;
     }
     
-    public List<Mentee> getMenteesByMentor(String mentorID) {
-        List<Mentee> menteeList = new ArrayList<>();
-        String query = "SELECT * FROM Mentee WHERE mentorID = ?";
-
+    public boolean updateMenteePerformance(String menteeID, double cgpa) {
+        String query = "UPDATE Mentee SET menteeCGPA = ? WHERE menteeID = ?";
         try (Connection con = DBConnection.createConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
-
-            ps.setString(1, mentorID);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Mentee m = new Mentee();
-                m.setMenteeID(rs.getString("menteeID"));
-                m.setMenteeFullname(rs.getString("menteeFullname"));
-                m.setMenteeProgramme(rs.getString("menteeProgramme"));
-                m.setMenteeSemester(rs.getInt("menteeSemester"));
-                m.setMenteeEmail(rs.getString("menteeEmail"));
-                m.setMentorID(rs.getString("mentorID"));
-                menteeList.add(m);
-            }
+            ps.setDouble(1, cgpa);
+            ps.setString(2, menteeID);
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return menteeList;
     }
 }
