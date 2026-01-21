@@ -45,6 +45,8 @@ public class MenteeDAO {
                 mentee.setMenteeEmail(rs.getString("MENTEEEMAIL"));
                 mentee.setMenteePhone(rs.getString("MENTEEPHONE"));
                 mentee.setMenteeUsername(rs.getString("MENTEEUSERNAME"));
+                
+                mentee.setMentorID(rs.getString("MENTORID"));
             }
             // No need for manual con.close() if using try-with-resources
         } catch (Exception e) {

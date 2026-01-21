@@ -1,8 +1,13 @@
 package com.irssmentors.controller;
 
 import com.irssmentors.dao.MenteePerformanceDAO;
+import com.irssmentors.model.Mentor;
+import com.irssmentors.dao.MentorDAO;
 import com.irssmentors.model.Mentee;
 import com.irssmentors.model.MenteePerformance;
+import com.irssmentors.controller.MenteeServlet;
+import com.irssmentors.dao.MentorTimetableDAO;
+import com.irssmentors.model.MentorTimetable;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -54,15 +59,41 @@ public class MenteeServlet extends HttpServlet {
                 request.getRequestDispatcher("mentee/performance.jsp").forward(request, response);
                 break;
                 
-            case "viewMentor":
-                // TODO: Add logic to fetch Mentor details based on currentMentee.getMentorID()
-                response.sendRedirect("mentee/menteeDashboard.jsp"); // Placeholder
-                break;
+                case "viewMentor":
+            // Get mentor ID from the mentee object in session
+            String mentorID = currentMentee.getMentorID(); 
+
+            MentorDAO mentorDAO = new MentorDAO();
+            Mentor assignedMentor = mentorDAO.getMentorByID(mentorID);
+
+            // Pass the mentor object to the JSP
+            request.setAttribute("mentor", assignedMentor);
+            request.getRequestDispatcher("mentee/mentorDetail.jsp").forward(request, response);
+            break;
                 
-            case "viewTimetable":
-                 // TODO: Add logic to fetch Mentor Timetable
-                response.sendRedirect("mentee/menteeDashboard.jsp"); // Placeholder
-                break;
+                case "viewTimetable":
+            // 1. Get the current mentee's assigned mentor ID
+            String mID = currentMentee.getMentorID(); 
+
+            // 2. Fetch the timetable slots using your existing DAO
+            MentorTimetableDAO ttDAO = new MentorTimetableDAO();
+            List<MentorTimetable> slots = ttDAO.getTimetable(mID);
+
+            // 3. Set attribute for JSP and forward
+            request.setAttribute("slotList", slots);
+            request.getRequestDispatcher("mentee/timetable.jsp").forward(request, response);
+            break;
+            
+            case "bookSlot":
+            String slotID = request.getParameter("slotID");
+            String menteeID = currentMentee.getMenteeID();
+
+            MentorTimetableDAO mtDAO = new MentorTimetableDAO();
+            mtDAO.bookSlot(slotID, menteeID);
+
+            // Redirect back to the timetable to see the updated status
+            response.sendRedirect("MenteeServlet?action=viewTimetable");
+            break;
         }
     }
 
