@@ -61,6 +61,14 @@ public class Mentee implements Serializable {
         return menteeID;
     }
 
+    public String getMenteeUsername() {
+        return menteeUsername;
+    }
+
+    public String getMenteePassword() {
+        return menteePassword;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -104,6 +112,14 @@ public class Mentee implements Serializable {
     // setters
     public void setMenteeID(String menteeID) {
         this.menteeID = menteeID;
+    }
+
+    public void setMenteeUsername(String menteeUsername) {
+        this.menteeUsername = menteeUsername;
+    }
+
+    public void setMenteePassword(String menteePassword) {
+        this.menteePassword = menteePassword;
     }
 
     public void setUsername(String username) {
