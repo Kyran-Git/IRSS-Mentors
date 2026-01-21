@@ -144,7 +144,7 @@
             </div>
             
             <div style="margin-top: 2.5rem; font-size: 0.9rem; color: #555;">
-                &copy; 2026 Student Mentorship System
+                &copy; 2026 UiTM Student Mentorship System
             </div>
         </div>
 

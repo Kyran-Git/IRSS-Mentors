@@ -21,6 +21,8 @@
         <c:if test="${not empty adminSession}">
             <a href="${pageContext.request.contextPath}/admin/adminDashboard.jsp" class="nav-item">Dashboard</a>
             <a href="${pageContext.request.contextPath}/ListMentorServlet" class="nav-item">Mentors</a>
+            <a href="${pageContext.request.contextPath}/ListMenteeServlet" class="nav-item">Mentees</a>
+            <a href="${pageContext.request.contextPath}/AdminServlet" class="nav-item">Performance</a>
         </c:if>
 
         <c:if test="${not empty mentorSession}">
@@ -31,6 +33,9 @@
         <c:if test="${not empty menteeSession}">
             <a href="${pageContext.request.contextPath}/MenteeServlet?action=dashboard" class="nav-item">Dashboard</a>
             <a href="${pageContext.request.contextPath}/MenteeServlet?action=viewProfile" class="nav-item">Profile</a>
+            <a href="${pageContext.request.contextPath}/MenteeServlet?action=viewPerformance" class="nav-item">Performance</a>
+            <a href="${pageContext.request.contextPath}/MenteeServlet?action=viewMentor" class="nav-item">Mentor</a>
+            <a href="${pageContext.request.contextPath}/MenteeServlet?action=viewTimetable" class="nav-item">Timetable</a>
         </c:if>
 
         <c:choose>

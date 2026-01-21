@@ -3,7 +3,7 @@
 <%
     // SECURITY LOCK
     if(session.getAttribute("adminSession") == null) {
-        response.sendRedirect("../login.jsp?role=admin");
+        response.sendRedirect(request.getContextPath() + "/login.jsp?role=admin");
         return;
     }
 %>
