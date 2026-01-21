@@ -13,26 +13,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Manage Timetable</title>
-        <style>
-            body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #1e2024; color: white; }
-            .navbar { background-color: #2d3436; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #3498db; }
-            .navbar h2 { margin: 0; color: #3498db; }
-            .btn-back { padding: 8px 15px; background-color: #7f8c8d; color: white; text-decoration: none; border-radius: 5px; font-size: 14px; }
-            .container { padding: 40px; max-width: 800px; margin: 0 auto; }
-            .card { background-color: #2d3436; padding: 25px; border-radius: 10px; border: 1px solid #444; margin-bottom: 20px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-            th { background-color: #3498db; color: white; padding: 10px; text-align: left; }
-            td { padding: 10px; border-bottom: 1px solid #444; }
-            input, select { padding: 10px; background: #1e2024; border: 1px solid #555; color: white; border-radius: 4px; width: 200px; }
-            .btn-add { background: #27ae60; border: none; padding: 10px 20px; color: white; border-radius: 4px; cursor: pointer; }
-            .btn-remove { background-color: #c0392b; color: white; text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 12px; }
-        </style>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     </head>
     <body>
-        <div class="navbar">
-            <h2>📅 Manage Timetable</h2>
-            <a href="${pageContext.request.contextPath}/MentorServlet?action=dashboard" class="btn-back">← Back to Dashboard</a>
-        </div>
+        <jsp:include page="../navbar.jsp" />
 
         <div class="container">
             
@@ -67,7 +51,9 @@
             <!-- VIEW SLOTS TABLE -->
             <h3>Current Slots</h3>
             <div class="card" style="padding: 0; overflow: hidden;">
-                <table>
+                
+                <div class ="table-wrapper">
+                    <table>
                     <thead>
                         <tr>
                             <th>Day</th>
@@ -91,6 +77,7 @@
                         </c:forEach>
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </body>

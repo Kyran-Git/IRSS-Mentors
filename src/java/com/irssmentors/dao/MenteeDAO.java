@@ -82,5 +82,39 @@ public class MenteeDAO {
         }
         return "Invalid user credentials";
     }
-
+    
+    public String registerMentee(Mentee mentee) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        
+        try {
+            con = DBConnection.createConnection();
+            
+            // Note: mentorID is omitted here (it will be NULL by default)
+            String sql = "INSERT INTO Mentee (menteeID, menteeFullname, menteeProgramme, menteeSemester, menteeEmail, menteePhone, menteeUsername, menteePassword) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            ps = con.prepareStatement(sql);
+            
+            ps.setString(1, mentee.getMenteeID());
+            ps.setString(2, mentee.getMenteeFullname());
+            ps.setString(3, mentee.getMenteeProgramme());
+            ps.setInt(4, mentee.getMenteeSemester());
+            ps.setString(5, mentee.getMenteeEmail());
+            ps.setString(6, mentee.getMenteePhone());
+            ps.setString(7, mentee.getMenteeUsername());
+            ps.setString(8, mentee.getMenteePassword());
+            
+            int i = ps.executeUpdate();
+            if (i > 0) {
+                return "SUCCESS";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Registration Failed: " + e.getMessage();
+        } finally {
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (con != null) con.close(); } catch (Exception e) {}
+        }
+        return "Unknown Error";
+    }
 }

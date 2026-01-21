@@ -19,44 +19,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Manage Performance</title>
-        <style>
-            /* CONSISTENT DARK THEME */
-            body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #1e2024; color: #ecf0f1; }
-            .navbar { background-color: #2c3e50; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #e74c3c; }
-            .navbar h2 { margin: 0; color: #ecf0f1; }
-            .btn-logout { padding: 8px 15px; background-color: #c0392b; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; }
-            .container { padding: 30px; max-width: 1200px; margin: 0 auto; }
-            
-            /* Table Styling */
-            table { width: 100%; border-collapse: collapse; background-color: #2d3436; border-radius: 8px; overflow: hidden; margin-top: 20px; }
-            th { background-color: #e74c3c; color: white; padding: 12px; text-align: left; }
-            td { padding: 12px; border-bottom: 1px solid #444; vertical-align: middle; }
-            tr:hover { background-color: #3d4648; }
-
-            /* Controls Styling */
-            input[type="text"], input[type="number"] { 
-                padding: 10px; background: #3d4648; border: 1px solid #555; color: white; border-radius: 4px; 
-            }
-            .inline-input { background: #1e2024 !important; border: 1px solid #555; color: #00d1b2 !important; padding: 5px !important; text-align: center; }
-            
-            .btn-submit { background-color: #27ae60; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
-            .btn-update { background-color: #f39c12; } /* Orange for sort button */
-            .btn-cancel { background-color: #7f8c8d; text-decoration: none; padding: 10px 20px; color: white; border-radius: 4px; display:inline-block; text-align:center; font-size: 14px;}
-
-            /* Alerts */
-            .alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; text-align: center; font-weight: bold; }
-            .alert-success { background-color: rgba(39, 174, 96, 0.2); border: 1px solid #27ae60; color: #2ecc71; }
-            .alert-error { background-color: rgba(231, 76, 60, 0.2); border: 1px solid #e74c3c; color: #ff7675; }
-        </style>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     </head>
     <body>
-        <div class="navbar">
-            <h2>⚙️ Admin Portal</h2>
-            <div style="display: flex; gap: 15px; align-items: center;">
-                <a href="admin/adminDashboard.jsp" style="color: white; text-decoration: none;">Back</a>
-                <a href="${pageContext.request.contextPath}/index.jsp" class="btn-logout">Logout</a>
-            </div>
-        </div>
+        <jsp:include page="../navbar.jsp" />
 
         <div class="container">
             <h3>📈 Mentee Performance Management</h3>
@@ -93,6 +59,7 @@
                 <a href="AdminServlet" class="btn-cancel" style="padding: 8px 15px;">Reset</a>
             </div>
 
+            <div class = "table-wrapper">
             <table>
                 <thead>
                     <tr>

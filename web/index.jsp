@@ -1,120 +1,152 @@
-
+<%-- 
+    Document   : index
+    Description: Main Landing Page - Role Selection
+--%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Welcome - Student Mentorship System</title>
+        
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        
         <style>
-            /* 1. Reset and Dark Base */
             body {
-                margin: 0;
-                padding: 0;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                /* Dark background gradient */
-                background: linear-gradient(135deg, #1e2024 0%, #232526 100%);
-                height: 100vh;
-                display: flex;
                 justify-content: center;
                 align-items: center;
-                color: #ffffff; /* Default text color is white */
+                height: 100vh;
+                background-image: radial-gradient(circle at top, #1f2937 0%, #0f1115 80%);
+                overflow: hidden;
             }
 
-            /* 2. The Dark Card */
-            .login-card {
-                background-color: #2d3436; /* Dark Gray Card */
-                padding: 40px;
-                border-radius: 12px;
-                /* Subtle shadow + faint border for contrast */
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                border: 1px solid #444; 
+            .welcome-card {
+                background: var(--bg-card);
+                border: var(--glass-border);
+                border-radius: 20px;
+                padding: 3rem;
                 text-align: center;
-                width: 100%;
-                max-width: 400px;
-                transition: transform 0.3s ease;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+                max-width: 800px;
+                width: 90%;
+                animation: fadeIn 0.8s ease-out;
             }
 
-            .login-card:hover {
-                transform: translateY(-5px);
-                border-color: #666; /* Lighten border on hover */
+            .welcome-header h1 {
+                font-size: 2.5rem;
+                margin-bottom: 0.5rem;
+                background: linear-gradient(to right, #fff, #94a3b8);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            
+            .welcome-header p {
+                color: var(--text-muted);
+                font-size: 1.1rem;
+                margin-bottom: 3rem;
             }
 
-            /* 3. Typography */
-            h1 {
-                color: #ffffff;
-                margin-bottom: 10px;
-                font-size: 24px;
-                letter-spacing: 1px;
+            /* Role Selection Grid */
+            .role-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
             }
 
-            p {
-                color: #b2bec3; /* Light Gray text */
-                margin-bottom: 30px;
-                font-size: 14px;
-            }
-
-            /* 4. Button Container */
-            .role-buttons {
+            .role-option {
                 display: flex;
                 flex-direction: column;
-                gap: 15px;
-            }
-
-            /* 5. Button Styling */
-            .btn {
-                padding: 14px 20px;
-                border: none;
-                border-radius: 8px;
-                font-size: 16px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 10px;
+                padding: 2rem 1.5rem;
+                background: var(--bg-input);
+                border: 1px solid #333;
+                border-radius: 12px;
                 text-decoration: none;
-                color: white;
-                /* Add subtle darkness to button backgrounds */
-                box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
             }
 
-            /* Specific Colors - Adjusted for Dark Mode */
-            .btn-admin {
-                background-color: #c0392b; /* Deep Red */
+            /* Icons */
+            .role-option i {
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+                transition: transform 0.3s;
             }
-            .btn-admin:hover { background-color: #e74c3c; box-shadow: 0 0 15px rgba(231, 76, 60, 0.4); }
 
-            .btn-mentor {
-                background-color: #2980b9; /* Deep Blue */
+            .role-option span {
+                color: var(--text-main);
+                font-weight: 600;
+                font-size: 1.1rem;
             }
-            .btn-mentor:hover { background-color: #3498db; box-shadow: 0 0 15px rgba(52, 152, 219, 0.4); }
 
-            .btn-mentee {
-                background-color: #27ae60; /* Deep Green */
+            /* Hover Effects & Specific Colors */
+            .role-option:hover {
+                transform: translateY(-5px);
+                border-color: rgba(255,255,255,0.1);
             }
-            .btn-mentee:hover { background-color: #2ecc71; box-shadow: 0 0 15px rgba(46, 204, 113, 0.4); }
 
+            /* Admin Style */
+            .role-admin:hover {
+                background: linear-gradient(145deg, rgba(239, 68, 68, 0.1), transparent);
+                border-color: var(--accent);
+            }
+            .role-admin i { color: var(--accent); }
+
+            /* Mentor Style */
+            .role-mentor:hover {
+                background: linear-gradient(145deg, rgba(245, 158, 11, 0.1), transparent);
+                border-color: #f59e0b;
+            }
+            .role-mentor i { color: #f59e0b; }
+
+            /* Mentee Style */
+            .role-mentee:hover {
+                background: linear-gradient(145deg, rgba(59, 130, 246, 0.1), transparent);
+                border-color: var(--primary);
+            }
+            .role-mentee i { color: var(--primary); }
+
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
         </style>
     </head>
     <body>
-        <div class = "login-card">
-        <h1>🎓 Mentorship System</h1>
-        <p>Welcome! Please select your role to continue.</p>
+        
+        <div class="welcome-card">
+            <div class="welcome-header">
+                <h1>IRSS Mentorship Portal</h1>
+                <p>Select your role to access the dashboard</p>
+            </div>
 
-        <div class="role-buttons">
-            <button class="btn btn-admin" onclick="location.href='login.jsp?role=Admin'">
-                <span>⚙️</span> Admin Portal
-            </button>
+            <div class="role-grid">
+                <!-- Admin Button -->
+                <a href="login.jsp?role=admin" class="role-option role-admin">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Admin</span>
+                </a>
 
-            <button class="btn btn-mentor" onclick="location.href='login.jsp?role=Mentor'">
-                <span>👨‍🏫</span> Mentor Access
-            </button>
+                <!-- Mentor Button -->
+                <a href="login.jsp?role=mentor" class="role-option role-mentor">
+                    <i class="fas fa-chalkboard-user"></i>
+                    <span>Mentor</span>
+                </a>
 
-            <button class="btn btn-mentee" onclick="location.href='login.jsp?role=Mentee'">
-                <span>🎓</span> Mentee Login
-            </button>
+                <!-- Mentee Button -->
+                <a href="login.jsp?role=mentee" class="role-option role-mentee">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>Student</span>
+                </a>
+            </div>
+            
+            <div style="margin-top: 2.5rem; font-size: 0.9rem; color: #555;">
+                &copy; 2026 Student Mentorship System
+            </div>
         </div>
-        <p style="margin-top: 20px; font-size: 12px; color: #aaa;">© 2025 University System</p>
-    </div>
+
     </body>
 </html>

@@ -343,6 +343,25 @@ public class AdminDAO {
             return false;
         }
     }
+    
+    // update mentee perf
+    public boolean updateMenteePerformance(String menteeID, double newCgpa) {
+        String query = "UPDATE Mentee SET menteeCgpa = ? WHERE menteeID = ?";
+
+        try (Connection con = DBConnection.createConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setDouble(1, newCgpa);
+            ps.setString(2, menteeID);
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     private void syncMainMenteeCGPA(String menteeID) {
         String syncQuery = "UPDATE Mentee SET menteeCGPA = (SELECT AVG(gpa) FROM MenteePerformance WHERE menteeID = ?) WHERE menteeID = ?";

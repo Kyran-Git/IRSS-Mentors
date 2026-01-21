@@ -4,29 +4,18 @@
 <html>
 <head>
     <title>Mentor Timetable</title>
-    <style>
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #1e2024; color: white; }
-        .navbar { background-color: #2d3436; padding: 15px 30px; border-bottom: 3px solid #3498db; }
-        .container { padding: 40px; max-width: 900px; margin: 0 auto; }
-        table { width: 100%; border-collapse: collapse; background: #2d3436; border-radius: 8px; overflow: hidden; }
-        th { background: #3498db; padding: 15px; text-align: left; }
-        td { padding: 15px; border-bottom: 1px solid #444; }
-        .btn-select { background: #27ae60; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; }
-        .btn-select:hover { background: #2ecc71; }
-        .btn-booked { background: #7f8c8d; color: white; padding: 8px 15px; border-radius: 4px; font-size: 14px; border: none; cursor: default; }
-        .no-slots { text-align: center; padding: 40px; color: #b2bec3; }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-    <div class="navbar">
-        <h2>📅 Mentor Availability</h2>
-    </div>
+    <jsp:include page="../navbar.jsp" />
 
     <div class="container">
         <h3>Available Slots</h3>
         <p>Please select a convenient time for your mentoring session.</p>
 
-        <table>
+        
+        <div class ="table-wrapper">
+            <table>
             <thead>
                 <tr>
                     <th>Day</th>
@@ -64,6 +53,8 @@
                 </c:if>
             </tbody>
         </table>
+        </div>
+        
         
         <br>
         <a href="MenteeServlet?action=dashboard" style="color: #3498db; text-decoration: none;">← Back to Dashboard</a>
