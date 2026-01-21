@@ -16,6 +16,8 @@ public class MentorTimetable implements Serializable {
     private String mentorID;
     private String availableDay;
     private String availableTime;
+    private String bookedByID; // The ID of the mentee who booked
+    private String menteeName; // Optional: helper to store name for display
     
     
      // Getters and Setters
@@ -30,4 +32,10 @@ public class MentorTimetable implements Serializable {
     
     public String getAvailableTime() { return availableTime; }
     public void setAvailableTime(String availableTime) { this.availableTime = availableTime; }
+    
+    public String getBookedByID() { return bookedByID; }
+    public void setBookedByID(String bookedByID) { this.bookedByID = bookedByID; }
+
+    public String getMenteeName() { return menteeName; }
+    public void setMenteeName(String menteeName) { this.menteeName = menteeName; }
 }
