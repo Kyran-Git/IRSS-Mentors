@@ -35,10 +35,12 @@ public class MentorDAO {
                 mentor.setMentorUsername(rs.getString("mentorUsername"));
             }
             con.close();
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return mentor;
     }
-    
+
     public List<Mentee> getMenteesByMentor(String mentorID) {
         List<Mentee> list = new ArrayList<>();
         try {
@@ -50,17 +52,21 @@ public class MentorDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Mentee m = new Mentee();
-                m.setMenteeID(rs.getString("menteeID"));
-                m.setMenteeFullname(rs.getString("menteeFullname"));
-                m.setMenteeProgramme(rs.getString("menteeProgramme"));
-                m.setMenteeSemester(rs.getInt("menteeSemester"));
-                m.setMenteeEmail(rs.getString("menteeEmail"));
-                m.setMenteePhone(rs.getString("menteePhone"));
+
+                Mentee m = new Mentee(
+                        rs.getString("menteeID"),
+                        rs.getString("menteeFullname"),
+                        rs.getString("menteeProgramme"),
+                        rs.getInt("menteeSemester"),
+                        rs.getString("menteeEmail"),
+                        rs.getString("menteePhone"));
                 list.add(m);
             }
+
             con.close();
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return list;
     }
 }
