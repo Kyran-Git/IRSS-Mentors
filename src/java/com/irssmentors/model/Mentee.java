@@ -52,8 +52,8 @@ public class Mentee implements Serializable {
     }
 
     public Mentee(String username, String password) {
-        this.username = username;
-        this.password = password;
+        this.menteeUsername = username;
+        this.menteePassword = password;
     }
 
     // getters
