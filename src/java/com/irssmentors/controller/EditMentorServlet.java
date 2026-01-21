@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.irssmentors.controller;
 
 import com.irssmentors.dao.AdminDAO;
@@ -18,66 +13,65 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "EditMentorServlet", urlPatterns = {"/EditMentorServlet"})
 public class EditMentorServlet extends HttpServlet {
 
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        
-        String username = request.getParameter("mentorUsername");
-        String password = request.getParameter("mentorUsername");
-        String fullname = request.getParameter("mentorFullname");
-        String email = request.getParameter("mentorEmail");
-        String phone = request.getParameter("mentorPhone");
-        String faculty = request.getParameter("mentorFaculty");
-        
-        AdminDAO adminDao = new AdminDAO();
-        List<Mentor> mentorList = adminDao.setMentor(username,password,fullname,email,phone,faculty);
-        
-        request.setAttribute("mentorList", mentorList);
-        request.getRequestDispatcher("admin/manageMentors.jsp").forward(request, response);
-        
-    }
+    // Note: We removed 'processRequest' to clearly separate GET (Load/Delete) and POST (Update)
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
+        
+        String id = request.getParameter("id");
+        String action = request.getParameter("action");
         AdminDAO adminDao = new AdminDAO();
 
-        if (username != null && !username.isEmpty()) {
-            Mentor mentorToEdit = adminDao.getMentorByUsername(username);
-            request.setAttribute("selectedMentor", mentorToEdit);
+        // 1. DELETE LOGIC
+        if ("delete".equals(action)) {
+            adminDao.deleteMentor(id); // Using ID, not username
+            response.sendRedirect("ListMentorServlet");
+            return;
         }
 
-        request.getRequestDispatcher("admin/manageMentors.jsp").forward(request, response);
+        // 2. LOAD EDIT FORM LOGIC
+        if (id != null && !id.isEmpty()) {
+            // Get specific mentor by ID to populate form
+            Mentor mentorToEdit = adminDao.getMentorByID(id);
+            request.setAttribute("selectedMentor", mentorToEdit);
+            
+            // Also fetch the list so the table at the bottom is still visible
+            request.setAttribute("mentorList", adminDao.getMentorList());
+            
+            // Forward (Keep the data alive)
+            request.getRequestDispatcher("admin/manageMentors.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("ListMentorServlet");
+        }
     }
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
+        
+        // UPDATE LOGIC
+        String mentorID = request.getParameter("mentorID"); // Hidden field
         String username = request.getParameter("mentorUsername");
+        String password = request.getParameter("mentorPassword");
+        String fullname = request.getParameter("mentorFullname");
+        String email = request.getParameter("mentorEmail");
+        String phone = request.getParameter("mentorPhone");
+        String faculty = request.getParameter("mentorFaculty");
+
+        Mentor mentor = new Mentor();
+        mentor.setMentorID(mentorID);
+        mentor.setMentorUsername(username);
+        mentor.setMentorPassword(password);
+        mentor.setMentorFullname(fullname);
+        mentor.setMentorEmail(email);
+        mentor.setMentorPhone(phone);
+        mentor.setMentorFaculty(faculty);
+
         AdminDAO adminDao = new AdminDAO();
+        adminDao.updateMentor(mentor); // Calls the update method in DAO
 
-        if ("Delete".equals(action)) {
-            adminDao.deleteMentor(username);
-        } else {
-            String password = request.getParameter("mentorPassword");
-            String fullname = request.getParameter("mentorFullname");
-            String email = request.getParameter("mentorEmail");
-            String phone = request.getParameter("mentorPhone");
-            String faculty = request.getParameter("mentorFaculty");
-
-            adminDao.setMentor(username, password, fullname, email, phone, faculty);
-        }
-
+        // Redirect to refresh list
         response.sendRedirect("ListMentorServlet");
     }
-
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
-
 }

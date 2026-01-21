@@ -19,15 +19,7 @@ public class MenteePerformance implements Serializable{
     private String menteePerformStatus;
     private String menteeRemark;
     
-    public MenteePerformance(String menteePerformID, String menteeID, int menteePerformSem, 
-            float menteeGpa, String menteePerformStatus, String menteeRemark){
-        this.menteePerformID=menteePerformID;
-        this.menteeID=menteeID;
-        this.menteePerformSem=menteePerformSem;
-        this.menteeGpa=menteeGpa;
-        this.menteePerformStatus=menteePerformStatus;
-        this.menteeRemark=menteeRemark;
-    }
+
     public int getMenteePerformSem() { return menteePerformSem; }
     public void setMenteePerformSem(int menteePerformSem) { this.menteePerformSem = menteePerformSem; }
     public float getMenteeGpa() { return menteeGpa; }

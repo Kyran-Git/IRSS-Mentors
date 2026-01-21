@@ -17,12 +17,6 @@ public class MentorTimetable implements Serializable {
     private String availableDay;
     private String availableTime;
     
-    public MentorTimetable(String mentorTimeID, String mentorID, String availableDay, String availableTime){
-        this.mentorTimeID = mentorTimeID;
-        this.mentorID = mentorID;
-        this.availableDay = availableDay;
-        this.availableTime = availableTime;
-    }
     
      // Getters and Setters
     public String getMentorTimeID() { return mentorTimeID; }

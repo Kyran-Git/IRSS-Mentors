@@ -5,6 +5,13 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    // SECURITY LOCK: Only allow if session is Mentee
+    if(session.getAttribute("menteeSession") == null) {
+        response.sendRedirect("../login.jsp?role=mentee"); // Kick them out
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>

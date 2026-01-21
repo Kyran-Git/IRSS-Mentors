@@ -1,4 +1,3 @@
-
 package com.irssmentors.controller;
 
 import com.irssmentors.dao.AdminDAO;
@@ -26,20 +25,24 @@ public class ListMentorServlet extends HttpServlet {
 
         String nextSort = "fullname";
 
+        // Logic to determine which Data to fetch
         if (searchName != null && !searchName.trim().isEmpty()) {
             mentorList = adminDAO.searchMentorsByName(searchName);
         } else if (sortBy != null && !sortBy.isEmpty()) {
             mentorList = adminDAO.getSortedMentorList(sortBy);
+            // Toggle sort for next click
             nextSort = sortBy.equals("fullname") ? "faculty" : "fullname";
         } else {
             mentorList = adminDAO.getMentorList();
-            nextSort = "fullname"; 
+            nextSort = "faculty"; // Default next sort option
         }
 
+        // Set attributes for JSP
         request.setAttribute("showList", true);
         request.setAttribute("currentSort", sortBy); 
         request.setAttribute("nextSort", nextSort);   
         request.setAttribute("mentorList", mentorList);
+        
         request.getRequestDispatcher("admin/manageMentors.jsp").forward(request, response);
     }
 
@@ -57,7 +60,6 @@ public class ListMentorServlet extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "List Mentor Controller";
     }
-
 }

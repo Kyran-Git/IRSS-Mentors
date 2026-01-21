@@ -1,4 +1,3 @@
-
 package com.irssmentors.controller;
 
 import com.irssmentors.dao.AdminDAO;
@@ -17,6 +16,21 @@ public class CreateMentorServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.sendRedirect("ListMentorServlet");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        
+        // 1. Get ALL parameters
+        String mentorID = request.getParameter("mentorID");
         String mentorUsername = request.getParameter("mentorUsername");
         String mentorPassword = request.getParameter("mentorPassword");
         String mentorFullname = request.getParameter("mentorFullname");
@@ -24,57 +38,27 @@ public class CreateMentorServlet extends HttpServlet {
         String mentorPhone = request.getParameter("mentorPhone");
         String mentorFaculty = request.getParameter("mentorFaculty");
         
-        Mentor mentor = new Mentor(mentorUsername,mentorPassword,mentorFullname,mentorEmail,mentorPhone,mentorFaculty);
+        // 2. Set Object
+        Mentor mentor = new Mentor();
+        mentor.setMentorID(mentorID);
+        mentor.setMentorUsername(mentorUsername);
+        mentor.setMentorPassword(mentorPassword);
+        mentor.setMentorFullname(mentorFullname);
+        mentor.setMentorEmail(mentorEmail);
+        mentor.setMentorPhone(mentorPhone);
+        mentor.setMentorFaculty(mentorFaculty);
+        
+        // 3. Database Operation
         AdminDAO adminDAO = new AdminDAO();
         String userValidate = adminDAO.registerNewMentor(mentor);
         
         if(userValidate.equals("SUCCESS")){
+            response.sendRedirect("ListMentorServlet");
+        }
+        else {
+            request.setAttribute("errMessage", userValidate);
+            request.setAttribute("mentorList", adminDAO.getMentorList());
             request.getRequestDispatcher("admin/manageMentors.jsp").forward(request, response);
         }
-        else
-        {
-            request.setAttribute("errMessage", userValidate);
-            request.getRequestDispatcher("Storyboard/index.html").forward(request, response);
-        }
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

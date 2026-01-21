@@ -1,239 +1,196 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.irssmentors.dao;
 
 import com.irssmentors.model.Admin;
 import com.irssmentors.model.Mentor;
 import com.irssmentors.utility.DBConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author nikla
- */
 public class AdminDAO {
     
+    // 1. Authenticate Admin
     public String authenticateUser(Admin admin){
-        
         String username = admin.getUsername();
         String password = admin.getPassword();
-        
         Connection con = null;
-        Statement statement = null;
+        PreparedStatement ps = null;
         ResultSet resultSet = null;
-        String usernameDB = "";
-        String passwordDB = "";
-        
         try{
             con = DBConnection.createConnection();
-            statement = con.createStatement();
-            resultSet = statement.executeQuery("select username,password from admin");
-            while(resultSet.next()){
-                usernameDB = resultSet.getString("username");
-                passwordDB = resultSet.getString("password");
-                if(username.equals(usernameDB) && password.equals(passwordDB)){
-                    return "SUCCESS";
-                }
+            String sql = "SELECT * FROM Admin WHERE adminUsername=? AND adminPassword=?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            resultSet = ps.executeQuery();
+            if(resultSet.next()){
+                return "SUCCESS";
             }
         } catch (SQLException e){
             e.printStackTrace();
+        } finally {
+            try { if(con!=null) con.close(); } catch(Exception e){}
         }
         return "Invalid user credentials";
     }
     
+    // 2. Register Mentor
     public String registerNewMentor(Mentor mentor){
-        
-        String username = mentor.getUsername();
-        String password = mentor.getPassword();
-        String mentorFullname = mentor.getFullname();
-        String mentorEmail = mentor.getEmail();
-        String mentorPhone = mentor.getPhone();
-        String mentorFaculty = mentor.getFaculty();
-        
         Connection con = null;
-        
         try{
             con = DBConnection.createConnection();
-            String query = "INSERT INTO MENTORS (username, password, fullname, email, phone, faculty) VALUES (?,?,?,?,?,?)";
+            String query = "INSERT INTO Mentor (mentorID, mentorUsername, mentorPassword, mentorFullname, mentorEmail, mentorPhone, mentorFaculty) VALUES (?,?,?,?,?,?,?)";
             PreparedStatement stmt = con.prepareStatement(query);
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-            stmt.setString(3, mentorFullname);
-            stmt.setString(4, mentorEmail);
-            stmt.setString(5, mentorPhone);
-            stmt.setString(6, mentorFaculty);
-            stmt.executeUpdate();
+          
+            stmt.setString(1, mentor.getMentorID());
+            stmt.setString(2, mentor.getMentorUsername());
+            stmt.setString(3, mentor.getMentorPassword());
+            stmt.setString(4, mentor.getMentorFullname());
+            stmt.setString(5, mentor.getMentorEmail());
+            stmt.setString(6, mentor.getMentorPhone());
+            stmt.setString(7, mentor.getMentorFaculty());
+            
+            int i = stmt.executeUpdate();
             con.close();
-            return "SUCCESS";
+            if(i > 0) return "SUCCESS";
+            
         } catch (SQLException e){
             e.printStackTrace();
+            System.out.println("Register Error: " + e.getMessage()); 
         }
         return "Failed register";
     }
     
+    // 3. Get List
     public List<Mentor> getMentorList(){
-        
         List<Mentor> mentorList = new ArrayList<>();
         Connection con = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        
         try{
             con = DBConnection.createConnection();
-            String query = "SELECT * FROM MENTORS";
-            statement = con.prepareStatement(query);
-            resultSet = statement.executeQuery();
-            
+            String query = "SELECT * FROM Mentor";
+            PreparedStatement statement = con.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
-                Mentor mentor = new Mentor(
-                resultSet.getString("username"),
-                resultSet.getString("password"),
-                resultSet.getString("fullname"),
-                resultSet.getString("email"),
-                resultSet.getString("phone"),
-                resultSet.getString("faculty")
-                );
+                Mentor mentor = new Mentor();
+                mentor.setMentorID(resultSet.getString("mentorID"));
+                mentor.setMentorUsername(resultSet.getString("mentorUsername"));
+                mentor.setMentorPassword(resultSet.getString("mentorPassword"));
+                mentor.setMentorFullname(resultSet.getString("mentorFullname"));
+                mentor.setMentorEmail(resultSet.getString("mentorEmail"));
+                mentor.setMentorPhone(resultSet.getString("mentorPhone"));
+                mentor.setMentorFaculty(resultSet.getString("mentorFaculty"));
                 mentorList.add(mentor);
             }
-        } catch (SQLException e){
-            e.printStackTrace();
-        } finally {
-            try { if (resultSet != null) resultSet.close(); } catch (Exception e) {}
-            try { if (statement != null) statement.close(); } catch (Exception e) {}
-            try { if (con != null) con.close(); } catch (Exception e) {}
-        }
+            con.close();
+        } catch (SQLException e){ e.printStackTrace(); }
         return mentorList;
     }
-    
+
+    // 4. Search
     public List<Mentor> searchMentorsByName(String name) {
         List<Mentor> mentorList = new ArrayList<>();
-        try (Connection con = DBConnection.createConnection()) {
- 
-            String query = "SELECT * FROM MENTORS WHERE fullname LIKE ?";
+        try {
+            Connection con = DBConnection.createConnection();
+            String query = "SELECT * FROM Mentor WHERE mentorFullname LIKE ?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
-                Mentor mentor = new Mentor(
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("fullname"),
-                    rs.getString("email"),
-                    rs.getString("phone"),
-                    rs.getString("faculty")
-                );
+                Mentor mentor = new Mentor();
+                mentor.setMentorID(rs.getString("mentorID"));
+                mentor.setMentorUsername(rs.getString("mentorUsername"));
+                mentor.setMentorPassword(rs.getString("mentorPassword"));
+                mentor.setMentorFullname(rs.getString("mentorFullname"));
+                mentor.setMentorEmail(rs.getString("mentorEmail"));
+                mentor.setMentorPhone(rs.getString("mentorPhone"));
+                mentor.setMentorFaculty(rs.getString("mentorFaculty"));
                 mentorList.add(mentor);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            con.close();
+        } catch (SQLException e) { e.printStackTrace(); }
         return mentorList;
     }
     
+    // 5. Sort
     public List<Mentor> getSortedMentorList(String column) {
         List<Mentor> mentorList = new ArrayList<>();
+        String orderBy = "mentorFullname"; 
+        if ("faculty".equals(column)) { orderBy = "mentorFaculty"; }
 
-        String orderBy = "fullname"; 
-        if ("faculty".equals(column)) { orderBy = "faculty"; }
-
-        String query = "SELECT * FROM MENTORS ORDER BY " + orderBy + " ASC";
-
-        try (Connection con = DBConnection.createConnection();
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-
+        try {
+            Connection con = DBConnection.createConnection();
+            String query = "SELECT * FROM Mentor ORDER BY " + orderBy + " ASC";
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                mentorList.add(new Mentor(
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("fullname"),
-                    rs.getString("email"),
-                    rs.getString("phone"),
-                    rs.getString("faculty")
-                ));
+                Mentor mentor = new Mentor();
+                mentor.setMentorID(rs.getString("mentorID"));
+                mentor.setMentorUsername(rs.getString("mentorUsername"));
+                mentor.setMentorPassword(rs.getString("mentorPassword"));
+                mentor.setMentorFullname(rs.getString("mentorFullname"));
+                mentor.setMentorEmail(rs.getString("mentorEmail"));
+                mentor.setMentorPhone(rs.getString("mentorPhone"));
+                mentor.setMentorFaculty(rs.getString("mentorFaculty"));
+                mentorList.add(mentor);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            con.close();
+        } catch (SQLException e) { e.printStackTrace(); }
         return mentorList;
     }
     
-    public Mentor getMentorByUsername(String username) {
-    Mentor mentor = null;
-    try (Connection con = DBConnection.createConnection()) {
-        String query = "SELECT * FROM MENTORS WHERE username = ?";
-        PreparedStatement ps = con.prepareStatement(query);
-        ps.setString(1, username);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            mentor = new Mentor(
-                rs.getString("username"),
-                rs.getString("password"),
-                rs.getString("fullname"),
-                rs.getString("email"),
-                rs.getString("phone"),
-                rs.getString("faculty")
-            );
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return mentor;
-}
-    
-    public List<Mentor> setMentor(String username, String password, String fullname, String email, String phone, String faculty){
-        
-        Connection con = null;
-        PreparedStatement statement = null;
-        
-        try{
-            con = DBConnection.createConnection(); 
-            String query = "UPDATE MENTORS SET password=?, fullname=?, email=?, phone=?, faculty=? WHERE username=?";
-            statement = con.prepareStatement(query);
-            
-            statement.setString(1,password);
-            statement.setString(2,fullname);
-            statement.setString(3,email);
-            statement.setString(4,phone);
-            statement.setString(5,faculty);
-            statement.setString(6,username);
-            
-            statement.executeUpdate();
-   
-        } catch (Exception e){
-            e.printStackTrace();
-        } finally {
-            try { if (con != null) con.close();} catch (Exception e) {}
-        }
-        return getMentorList();
-    }
-    
-    public String deleteMentor(String username) {
-        Connection con = null;
-        PreparedStatement statement = null;
+    // 6. Get By ID
+    public Mentor getMentorByID(String mentorID) {
+        Mentor mentor = null;
         try {
-            con = DBConnection.createConnection();
-            String query = "DELETE FROM MENTORS WHERE username = ?";
-            statement = con.prepareStatement(query);
-            statement.setString(1, username);
-
+            Connection con = DBConnection.createConnection();
+            String query = "SELECT * FROM Mentor WHERE mentorID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, mentorID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                mentor = new Mentor();
+                mentor.setMentorID(rs.getString("mentorID"));
+                mentor.setMentorUsername(rs.getString("mentorUsername"));
+                mentor.setMentorPassword(rs.getString("mentorPassword"));
+                mentor.setMentorFullname(rs.getString("mentorFullname"));
+                mentor.setMentorEmail(rs.getString("mentorEmail"));
+                mentor.setMentorPhone(rs.getString("mentorPhone"));
+                mentor.setMentorFaculty(rs.getString("mentorFaculty"));
+            }
+            con.close();
+        } catch (SQLException e) { e.printStackTrace(); }
+        return mentor;
+    }
+    
+    // 7. Update
+    public void updateMentor(Mentor mentor){
+        try{
+            Connection con = DBConnection.createConnection(); 
+            String query = "UPDATE Mentor SET mentorPassword=?, mentorFullname=?, mentorEmail=?, mentorPhone=?, mentorFaculty=?, mentorUsername=? WHERE mentorID=?";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1,mentor.getMentorPassword());
+            statement.setString(2,mentor.getMentorFullname());
+            statement.setString(3,mentor.getMentorEmail());
+            statement.setString(4,mentor.getMentorPhone());
+            statement.setString(5,mentor.getMentorFaculty());
+            statement.setString(6,mentor.getMentorUsername());
+            statement.setString(7,mentor.getMentorID());
+            statement.executeUpdate();
+            con.close();
+        } catch (Exception e){ e.printStackTrace(); }
+    }
+    
+    // 8. Delete
+    public String deleteMentor(String mentorID) {
+        try {
+            Connection con = DBConnection.createConnection();
+            String query = "DELETE FROM Mentor WHERE mentorID = ?";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, mentorID);
             int result = statement.executeUpdate();
+            con.close();
             if (result > 0) return "SUCCESS";
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try { if (con != null) con.close(); } catch (Exception e) {}
-        }
+        } catch (SQLException e) { e.printStackTrace(); }
         return "FAILURE";
     }
 }
