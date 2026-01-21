@@ -53,13 +53,13 @@ public class MentorDAO {
 
             while (rs.next()) {
 
-                Mentee m = new Mentee(
-                        rs.getString("menteeID"),
-                        rs.getString("menteeFullname"),
-                        rs.getString("menteeProgramme"),
-                        rs.getInt("menteeSemester"),
-                        rs.getString("menteeEmail"),
-                        rs.getString("menteePhone"));
+                Mentee m = new Mentee();
+                        m.setMenteeID(rs.getString("menteeID"));
+                        m.setMenteeFullname(rs.getString("menteeFullname"));
+                        m.setMenteeProgramme(rs.getString("menteeProgramme"));
+                        m.setMenteeSemester(rs.getInt("menteeSemester"));
+                        m.setMenteeEmail(rs.getString("menteeEmail"));
+                        m.setMenteePhone(rs.getString("menteePhone"));
                 list.add(m);
             }
 
