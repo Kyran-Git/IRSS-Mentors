@@ -17,40 +17,66 @@ import java.util.UUID;
  * @author nikla
  */
 public class MentorTimetableDAO {
-    public List<MentorTimetable> getTimetable(String mentorID) {
-        List<MentorTimetable> list = new ArrayList<>();
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        
-        try {
-            con = DBConnection.createConnection();
-            String sql = "SELECT * FROM MentorTimetable WHERE mentorID = ?";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, mentorID);
-            rs = ps.executeQuery();
-            
-            while(rs.next()){
-                MentorTimetable t = new MentorTimetable();
-                
-                t.setMentorTimeID(rs.getString("mentorTimeID"));
-                t.setMentorID(rs.getString("mentorID"));
-                t.setAvailableDay(rs.getString("availableDay"));
-                t.setAvailableTime(rs.getString("availableTime"));
-                
-                list.add(t);
-                System.out.println("DAO: Found slot " + t.getAvailableDay() + " for " + mentorID);
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            try { if(rs!=null) rs.close(); } catch(Exception e){}
-            try { if(ps!=null) ps.close(); } catch(Exception e){}
-            try { if(con!=null) con.close(); } catch(Exception e){}
+            public List<MentorTimetable> getTimetable(String mentorID) {
+            List<MentorTimetable> list = new ArrayList<>();
+            try (Connection con = DBConnection.createConnection()) {
+                String sql = "SELECT * FROM MentorTimetable WHERE mentorID = ?";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1, mentorID);
+                ResultSet rs = ps.executeQuery();
+
+                while(rs.next()){
+                    MentorTimetable t = new MentorTimetable();
+                    t.setMentorTimeID(rs.getString("mentorTimeID"));
+                    t.setAvailableDay(rs.getString("availableDay"));
+                    t.setAvailableTime(rs.getString("availableTime"));
+                    t.setBookedByID(rs.getString("bookedByID")); // This line is crucial!
+                    list.add(t);
+                }
+            } catch(Exception e) { e.printStackTrace(); }
+            return list;
         }
-        return list;
-    }
+
+                public boolean bookSlot(String slotID, String menteeID) {
+                try (Connection con = DBConnection.createConnection()) {
+                    String sql = "UPDATE MentorTimetable SET bookedByID = ? WHERE mentorTimeID = ? AND bookedByID IS NULL";
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setString(1, menteeID);
+                    ps.setString(2, slotID);
+                    return ps.executeUpdate() > 0;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
     
+        public List<MentorTimetable> getTimetableForMentor(String mentorID) {
+    List<MentorTimetable> list = new ArrayList<>();
+    try (Connection con = DBConnection.createConnection()) {
+        // SQL JOIN: Gets timetable data AND the mentee's full name
+        String sql = "SELECT t.*, m.menteeFullname FROM MentorTimetable t " +
+                     "LEFT JOIN Mentee m ON t.bookedByID = m.menteeID " +
+                     "WHERE t.mentorID = ?";
+        
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, mentorID);
+        ResultSet rs = ps.executeQuery();
+        
+        while(rs.next()){
+            MentorTimetable t = new MentorTimetable();
+            t.setMentorTimeID(rs.getString("mentorTimeID"));
+            t.setAvailableDay(rs.getString("availableDay"));
+            t.setAvailableTime(rs.getString("availableTime"));
+            
+            // Set the mentee name from the 'menteeFullname' column in the JOIN
+            t.setMenteeName(rs.getString("menteeFullname")); 
+            
+            list.add(t);
+        }
+    } catch(Exception e) { e.printStackTrace(); }
+    return list;
+}
+        
     public void addSlot(MentorTimetable slot) {
         Connection con = null;
         try {
