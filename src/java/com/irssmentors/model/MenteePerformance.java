@@ -11,21 +11,28 @@ import java.io.Serializable;
  *
  * @author nikla
  */
-public class MenteePerformance implements Serializable{
-    private String menteePerformID;
-    private String menteeID;
-    private int menteePerformSem;
-    private float menteeGpa;
-    private String menteePerformStatus;
-    private String menteeRemark;
-    
 
-    public int getMenteePerformSem() { return menteePerformSem; }
-    public void setMenteePerformSem(int menteePerformSem) { this.menteePerformSem = menteePerformSem; }
-    public float getMenteeGpa() { return menteeGpa; }
-    public void setMenteeGpa(float menteeGpa) { this.menteeGpa = menteeGpa; }
-    public String getMenteePerformStatus() { return menteePerformStatus; }
-    public void setMenteePerformStatus(String menteePerformStatus) { this.menteePerformStatus = menteePerformStatus; }
-    public String getMenteeRemark() { return menteeRemark; }
-    public void setMenteeRemark(String menteeRemark) { this.menteeRemark = menteeRemark; }
+import java.io.Serializable;
+
+public class MenteePerformance implements Serializable {
+
+    private String perfID;      // Column: PERFID
+    private String menteeID;    // Column: MENTEEID
+    private int semester;       // Column: SEMESTER
+    private double gpa;         // Column: GPA
+    private String status;      // Column: STATUS
+
+    // Getters
+    public String getPerfID() { return perfID; }
+    public String getMenteeID() { return menteeID; }
+    public int getSemester() { return semester; }
+    public double getGpa() { return gpa; }
+    public String getStatus() { return status; }
+
+    // Setters
+    public void setPerfID(String perfID) { this.perfID = perfID; }
+    public void setMenteeID(String menteeID) { this.menteeID = menteeID; }
+    public void setSemester(int semester) { this.semester = semester; }
+    public void setGpa(double gpa) { this.gpa = gpa; }
+    public void setStatus(String status) { this.status = status; }
 }
