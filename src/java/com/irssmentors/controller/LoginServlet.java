@@ -68,71 +68,71 @@ public class LoginServlet extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+
+        // 2. Route based on Role
+        if ("admin".equalsIgnoreCase(role))
+
+        {
+            Admin admin = new Admin(username, password);
+            AdminDAO adminDAO = new AdminDAO();
+            admin.setUsername(username);
+            admin.setPassword(password);
+
+            // Check credentials
+            if (adminDAO.authenticateUser(admin).equals("SUCCESS")) {
+                // Set Session
+                session.setAttribute("adminSession", admin);
+                session.setAttribute("userRole", "admin");
+
+                response.sendRedirect("admin/adminDashboard.jsp");
+            } else {
+                // Login Failed
+                request.setAttribute("errMessage", "Invalid Admin Credentials");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+
+        } else if ("mentor".equalsIgnoreCase(role)) {
+            MentorDAO mentorDAO = new MentorDAO();
+            Mentor mentor = mentorDAO.login(username, password);
+
+            if (mentor != null) {
+                session.setAttribute("mentorSession", mentor);
+                response.sendRedirect("MentorServlet?action=dashboard");
+            } else {
+                request.setAttribute("errMessage", "Invalid Mentor Credentials");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+
+        } else if ("mentee".equalsIgnoreCase(role)) {
+
+            MenteeDAO menteeDAO = new MenteeDAO();
+            Mentee mentee = menteeDAO.login(username, password);
+
+            if (mentee != null) {
+                session.setAttribute("menteeSession", mentee);
+                // The session old ver
+                // response.sendRedirect("mentee/menteeDashboard.jsp");
+
+                // The session new for the mentee
+                request.getRequestDispatcher("mentee/menteeDashboard.jsp").forward(request, response);
+            } else {
+                request.setAttribute("errMessage", "Invalid Mentee Credentials");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+
+        } else {
+            // Default or Mentee logic here
+            request.setAttribute("errMessage", "Please select a valid role.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
     }
-
-    // 2. Route based on Role
-    if("admin".equalsIgnoreCase(role))
-
-    {
-        Admin admin = new Admin(username, password);
-        AdminDAO adminDAO = new AdminDAO();
-        admin.setUsername(username);
-        admin.setPassword(password);
-
-        // Check credentials
-        if (adminDAO.authenticateUser(admin).equals("SUCCESS")) {
-            // Set Session
-            session.setAttribute("adminSession", admin);
-            session.setAttribute("userRole", "admin");
-
-            response.sendRedirect("admin/adminDashboard.jsp");
-        } else {
-            // Login Failed
-            request.setAttribute("errMessage", "Invalid Admin Credentials");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }
-
-    }else if("mentor".equalsIgnoreCase(role))
-    {
-        MentorDAO mentorDAO = new MentorDAO();
-        Mentor mentor = mentorDAO.login(username, password);
-
-        if (mentor != null) {
-            session.setAttribute("mentorSession", mentor);
-            response.sendRedirect("MentorServlet?action=dashboard");
-        } else {
-            request.setAttribute("errMessage", "Invalid Mentor Credentials");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }
-
-    }else if("mentee".equalsIgnoreCase(role))
-    {
-        Mentee mentee = new Mentee(username, password);
-        MenteeDAO menteeDAO = new MenteeDAO();
-        mentee.setMenteeUsername(username);
-        mentee.setMenteePassword(password);
-
-        if (mentee != null) {
-            session.setAttribute("menteeSession", mentee);
-            response.sendRedirect("MenteeServlet?action=dashboard");
-        } else {
-            request.setAttribute("errMessage", "Invalid Mentee Credentials");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }
-
-    }else
-    {
-        // Default or Mentee logic here
-        request.setAttribute("errMessage", "Please select a valid role.");
-        request.getRequestDispatcher("login.jsp").forward(request, response);
-    }
-}}
+}
