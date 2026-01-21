@@ -73,14 +73,6 @@ public class Mentee implements Serializable {
         return menteePassword;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
     public String getMenteeFullname() {
         return menteeFullname;
     }
@@ -124,14 +116,6 @@ public class Mentee implements Serializable {
 
     public void setMenteePassword(String menteePassword) {
         this.menteePassword = menteePassword;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setMenteeFullname(String menteeFullname) {
