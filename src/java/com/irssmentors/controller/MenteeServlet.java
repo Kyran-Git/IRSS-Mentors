@@ -1,7 +1,10 @@
 package com.irssmentors.controller;
 
+import com.irssmentors.dao.MenteePerformanceDAO;
 import com.irssmentors.model.Mentee;
+import com.irssmentors.model.MenteePerformance;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,13 +36,22 @@ public class MenteeServlet extends HttpServlet {
                 break;
 
             case "viewProfile":
-                // The data is already in 'menteeSession', so we just forward to the JSP
+                
                 request.getRequestDispatcher("mentee/menteeProfile.jsp").forward(request, response);
                 break;
                 
             case "viewPerformance":
-                // TODO: Add logic to fetch performance list from DAO later
-                response.sendRedirect("mentee/menteeDashboard.jsp"); // Placeholder
+                // 1. Fetch Performance Data using the MenteeID from session
+                MenteePerformanceDAO perfDAO = new MenteePerformanceDAO();
+
+                // This assumes currentMentee is not null (checked at top of Servlet)
+                List<MenteePerformance> perfList = perfDAO.getPerformanceByMentee(currentMentee.getMenteeID());
+
+                // 2. Set Attribute so JSP can see it
+                request.setAttribute("performanceList", perfList);
+
+                // 3. Forward to the JSP
+                request.getRequestDispatcher("mentee/performance.jsp").forward(request, response);
                 break;
                 
             case "viewMentor":
