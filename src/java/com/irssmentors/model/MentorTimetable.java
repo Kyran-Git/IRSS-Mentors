@@ -16,8 +16,8 @@ public class MentorTimetable implements Serializable {
     private String mentorID;
     private String availableDay;
     private String availableTime;
-    private String bookedByID; // The ID of the mentee who booked
-    private String menteeName; // Optional: helper to store name for display
+    private String bookedByID;
+    private String menteeName;
     
     
      // Getters and Setters

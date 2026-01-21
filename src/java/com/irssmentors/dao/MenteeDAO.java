@@ -25,7 +25,6 @@ public class MenteeDAO {
 
     public Mentee login(String username, String password) {
         Mentee mentee = null;
-        // Using try-with-resources is better practice for auto-closing connections
         try (Connection con = DBConnection.createConnection()) {
             String sql = "SELECT * FROM MENTEE WHERE MENTEEUSERNAME = ? AND MENTEEPASSWORD = ?";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -35,9 +34,8 @@ public class MenteeDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                mentee = new Mentee(); // Use the empty constructor you added earlier
+                mentee = new Mentee(); 
 
-                // Use the column names EXACTLY as they appear in your SQL database
                 mentee.setMenteeID(rs.getString("MENTEEID"));
                 mentee.setMenteeFullname(rs.getString("MENTEEFULLNAME"));
                 mentee.setMenteeProgramme(rs.getString("MENTEEPROGRAMME"));
@@ -48,7 +46,6 @@ public class MenteeDAO {
                 
                 mentee.setMentorID(rs.getString("MENTORID"));
             }
-            // No need for manual con.close() if using try-with-resources
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,7 +87,6 @@ public class MenteeDAO {
         try {
             con = DBConnection.createConnection();
             
-            // Note: mentorID is omitted here (it will be NULL by default)
             String sql = "INSERT INTO Mentee (menteeID, menteeFullname, menteeProgramme, menteeSemester, menteeEmail, menteePhone, menteeUsername, menteePassword) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             
             ps = con.prepareStatement(sql);

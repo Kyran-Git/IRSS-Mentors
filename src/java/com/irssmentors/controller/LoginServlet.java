@@ -44,12 +44,8 @@ public class LoginServlet extends HttpServlet {
 
             // Verify Credentials
             if (adminDao.authenticateUser(admin).equals("SUCCESS")) {
-                // A. Create Session Attribute (Required for Security Lock)
                 session.setAttribute("adminSession", admin);
                 
-                // B. Redirect to Dashboard
-                // We redirect to adminDashboard.jsp (Assuming it has the failsafe script we added)
-                // Or you can redirect to "ListMentorServlet" to be safe.
                 response.sendRedirect("admin/adminDashboard.jsp");
             } else {
                 failLogin(request, response, role, "Invalid Admin Credentials");
@@ -59,14 +55,11 @@ public class LoginServlet extends HttpServlet {
         // --- MENTOR LOGIC ---
         else if ("mentor".equalsIgnoreCase(role)) {
             MentorDAO mentorDAO = new MentorDAO();
-            // Assuming MentorDAO.login returns a Mentor object if success, or null if fail
             Mentor mentor = mentorDAO.login(username, password);
 
             if (mentor != null) {
-                // A. Create Session Attribute
                 session.setAttribute("mentorSession", mentor);
                 
-                // B. Redirect to MentorServlet (Vital to load the Mentee List)
                 response.sendRedirect("MentorServlet?action=dashboard");
             } else {
                 failLogin(request, response, role, "Invalid Mentor Credentials");
@@ -76,15 +69,11 @@ public class LoginServlet extends HttpServlet {
         // --- MENTEE LOGIC ---
         else if ("mentee".equalsIgnoreCase(role)) {
             MenteeDAO menteeDAO = new MenteeDAO();
-            // Assuming MenteeDAO.login returns a Mentee object if success, or null if fail
             Mentee mentee = menteeDAO.login(username, password);
 
             if (mentee != null) {
-                // A. Create Session Attribute
                 session.setAttribute("menteeSession", mentee);
                 
-                // B. Redirect to Mentee Dashboard
-                // Using sendRedirect avoids form resubmission issues
                 response.sendRedirect("mentee/menteeDashboard.jsp");
             } else {
                 failLogin(request, response, role, "Invalid Mentee Credentials");

@@ -21,10 +21,8 @@ public class MenteePerformanceDAO {
     public List<MenteePerformance> getPerformanceByMentee(String menteeID) {
         List<MenteePerformance> list = new ArrayList<>();
         
-        // Use try-with-resources to automatically close connections
         try (Connection con = DBConnection.createConnection()) {
             
-            // SQL Query matching your table name
             String sql = "SELECT * FROM MENTEEPERFORMANCE WHERE MENTEEID = ? ORDER BY SEMESTER ASC";
             
             PreparedStatement ps = con.prepareStatement(sql);
@@ -35,8 +33,6 @@ public class MenteePerformanceDAO {
             while(rs.next()) {
                 MenteePerformance mp = new MenteePerformance();
                 
-                // MAPPING: DB Column Name -> Java Setter
-                // These strings MUST match the Uppercase names in your screenshot
                 mp.setPerfID(rs.getString("PERFID"));
                 mp.setMenteeID(rs.getString("MENTEEID"));
                 mp.setSemester(rs.getInt("SEMESTER"));

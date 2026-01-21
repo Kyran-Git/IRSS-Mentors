@@ -1,5 +1,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+    // Security check
+    if(session.getAttribute("menteeSession") == null) {
+        response.sendRedirect("../login.jsp?role=mentee");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +27,7 @@
                 <tr>
                     <th>Day</th>
                     <th>Time</th>
-                    <th>Action</th> <!-- Only 3 columns for Mentee -->
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>

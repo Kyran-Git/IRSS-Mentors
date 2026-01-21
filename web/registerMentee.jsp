@@ -11,11 +11,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Student Registration</title>
-        <!-- Use the new Premium CSS -->
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <!-- Include Navbar (It handles non-logged-in state automatically) -->
         <jsp:include page="navbar.jsp" />
 
         <div class="container" style="max-width: 600px;">

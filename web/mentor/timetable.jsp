@@ -43,7 +43,7 @@
                     </div>
                     
                     <div style="margin-top: 18px;">
-                        <button type="submit" class="btn-add">Add Slot</button>
+                        <button type="submit" class="btn btn-primary">Add Slot</button>
                     </div>
                 </form>
             </div>
@@ -58,7 +58,7 @@
                         <tr>
                             <th>Day</th>
                             <th>Time</th>
-                            <th>Booked By</th> <!-- New Column -->
+                            <th>Booked By</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -71,7 +71,7 @@
                                     ${empty slot.menteeName ? "—" : slot.menteeName}
                                 </td>
                                 <td>
-                                    <a href="MentorServlet?action=removeSlot&id=${slot.mentorTimeID}" class="btn-remove">Remove</a>
+                                    <a href="MentorServlet?action=removeSlot&id=${slot.mentorTimeID}" class="btn btn-remove">Remove</a>
                                 </td>
                             </tr>
                         </c:forEach>

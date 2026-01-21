@@ -49,10 +49,8 @@ public class MenteeServlet extends HttpServlet {
                 // 1. Fetch Performance Data using the MenteeID from session
                 MenteePerformanceDAO perfDAO = new MenteePerformanceDAO();
 
-                // This assumes currentMentee is not null (checked at top of Servlet)
                 List<MenteePerformance> perfList = perfDAO.getPerformanceByMentee(currentMentee.getMenteeID());
 
-                // 2. Set Attribute so JSP can see it
                 request.setAttribute("performanceList", perfList);
 
                 // 3. Forward to the JSP

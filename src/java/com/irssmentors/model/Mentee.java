@@ -23,7 +23,7 @@ public class Mentee implements Serializable {
     private int menteeSemester;
     private double menteeCGPA;
     private String menteeStatus;
-    private String mentorID; // Foreign key
+    private String mentorID;
 
     public Mentee(String menteeID, String menteeUsername, String menteePassword, String menteeFullname,
             String menteeEmail, String menteePhone,

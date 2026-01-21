@@ -41,13 +41,13 @@
                 <%-- Search Form --%>
                 <form action="AdminServlet" method="GET" style="display: flex; gap: 5px;">
                     <input type="text" name="searchName" placeholder="Search mentee name..." value="${param.searchName}" style="width: 250px;">
-                    <button type="submit" class="btn-submit" style="padding: 8px 15px;">Search</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 15px;">Search</button>
                 </form>
 
                 <%-- Dynamic Sorting Button (Simplified: Name <-> Programme) --%>
                 <form action="AdminServlet" method="GET">
                     <input type="hidden" name="sortBy" value="${empty nextSort ? 'fullname' : nextSort}">
-                    <button type="submit" class="btn-submit btn-update" style="padding: 8px 15px;">
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 15px;">
                         Sort by: 
                         <c:choose>
                             <c:when test="${nextSort == 'programme'}">Programme</c:when>
@@ -56,7 +56,7 @@
                     </button>
                 </form>
 
-                <a href="AdminServlet" class="btn-cancel" style="padding: 8px 15px;">Reset</a>
+                <a href="AdminServlet" class="btn btn-outline" style="padding: 8px 15px;">Reset</a>
             </div>
 
             <div class = "table-wrapper">
@@ -90,7 +90,7 @@
                                         <input type="number" step="0.01" name="gpa" class="inline-input" style="width: 70px;" min="0" max="4" required>
                                     </div>
                                     
-                                    <button type="submit" class="btn-submit" style="margin-top: 14px; padding: 8px 15px;">Add Record</button>
+                                    <button type="submit" class="btn btn-primary" style="margin-top: 14px; padding: 8px 15px;">Add Record</button>
                                 </form>
                             </td>
                         </tr>

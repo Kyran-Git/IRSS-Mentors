@@ -346,7 +346,7 @@ public class AdminDAO {
     
     // update mentee perf
     public boolean updateMenteePerformance(String menteeID, double newCgpa) {
-        String query = "UPDATE Mentee SET menteeCgpa = ? WHERE menteeID = ?";
+        String query = "UPDATE Mentee SET menteeGpa = ? WHERE menteeID = ?";
 
         try (Connection con = DBConnection.createConnection();
              PreparedStatement ps = con.prepareStatement(query)) {

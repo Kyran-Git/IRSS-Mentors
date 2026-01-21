@@ -21,7 +21,6 @@ public class ListMenteePerformance extends HttpServlet {
         String sortBy = request.getParameter("sortBy");
         List<Mentee> menteeList;
 
-        // 1. DATA RETRIEVAL
         if (searchName != null && !searchName.trim().isEmpty()) {
             menteeList = adminDAO.searchMenteesByName(searchName);
         } else if (sortBy != null && !sortBy.isEmpty()) {
@@ -30,12 +29,11 @@ public class ListMenteePerformance extends HttpServlet {
             menteeList = adminDAO.getMenteeList();
         }
 
-        // 2. SORT CYCLE LOGIC: (fullname -> programme -> back to fullname)
         String nextSort;
         if ("fullname".equals(sortBy)) {
             nextSort = "programme";
         } else {
-            nextSort = "fullname"; // If currently programme or empty, next is fullname
+            nextSort = "fullname";
         }
 
         // 3. SET ATTRIBUTES

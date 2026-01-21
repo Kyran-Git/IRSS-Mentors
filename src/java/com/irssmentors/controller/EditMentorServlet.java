@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "EditMentorServlet", urlPatterns = {"/EditMentorServlet"})
 public class EditMentorServlet extends HttpServlet {
 
-    // Note: We removed 'processRequest' to clearly separate GET (Load/Delete) and POST (Update)
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,7 +23,7 @@ public class EditMentorServlet extends HttpServlet {
 
         // 1. DELETE LOGIC
         if ("delete".equals(action)) {
-            adminDao.deleteMentor(id); // Using ID, not username
+            adminDao.deleteMentor(id);
             response.sendRedirect("ListMentorServlet");
             return;
         }
@@ -36,7 +34,6 @@ public class EditMentorServlet extends HttpServlet {
             Mentor mentorToEdit = adminDao.getMentorByID(id);
             request.setAttribute("selectedMentor", mentorToEdit);
             
-            // Also fetch the list so the table at the bottom is still visible
             request.setAttribute("mentorList", adminDao.getMentorList());
             
             // Forward (Keep the data alive)

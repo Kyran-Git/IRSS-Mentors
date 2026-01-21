@@ -42,7 +42,6 @@
                         <c:when test="${not empty performanceList}">
                             <c:forEach var="p" items="${performanceList}">
                                 <tr>
-                                    <!-- Updated to match new MenteePerformance.java -->
                                     <td>${p.perfID}</td>
                                     <td>Semester ${p.semester}</td>
                                     <td>${p.gpa}</td>

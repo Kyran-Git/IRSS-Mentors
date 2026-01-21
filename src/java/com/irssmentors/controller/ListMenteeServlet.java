@@ -41,12 +41,10 @@ public class ListMenteeServlet extends HttpServlet {
         } else {
             menteeList = adminDAO.getMenteeList();
         }
-
-        // 4. FIX CYCLE: (Name -> Programme -> Status -> back to Name)
         String nextSort;
         if ("fullname".equals(sortBy)) nextSort = "programme";
         else if ("programme".equals(sortBy)) nextSort = "status";
-        else if ("status".equals(sortBy)) nextSort = "fullname"; // Added missing link
+        else if ("status".equals(sortBy)) nextSort = "fullname";
         else nextSort = "fullname";
 
         // 5. SET ATTRIBUTES AND FORWARD

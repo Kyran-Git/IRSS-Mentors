@@ -49,7 +49,6 @@
                             </div>
                             <br>
                             <button type="submit" class="btn-submit btn-update">Update Mentor</button>
-                            <!-- FIX 1: Point Cancel to ListServlet to reset view -->
                             <a href="${pageContext.request.contextPath}/ListMentorServlet" class="btn-cancel">Cancel</a>
                         </form>
                     </c:when>
@@ -67,7 +66,7 @@
                                 <div><label>Faculty</label><br><input type="text" name="mentorFaculty" placeholder="Faculty Name" required></div>
                             </div>
                             <br>
-                            <button type="submit" class="btn-submit">Register Mentor</button>
+                            <button type="submit" class="btn btn-primary">Register Mentor</button>
                         </form>
                     </c:otherwise>
                 </c:choose>
@@ -80,21 +79,19 @@
                 <!-- Search Bar -->
                 <form action="${pageContext.request.contextPath}/ListMentorServlet" method="GET" style="display: flex; gap: 5px;">
                     <input type="text" name="searchName" placeholder="Search by name..." value="${param.searchName}" style="width: 250px;">
-                    <button type="submit" class="btn-submit" style="padding: 8px 15px;">Search</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 15px;">Search</button>
                 </form>
-
-                <!-- FIX 2: Sort Button (Toggles between Name/Faculty based on Servlet logic) -->
                 <form action="${pageContext.request.contextPath}/ListMentorServlet" method="GET">
                     <input type="hidden" name="sortBy" value="${empty nextSort ? 'fullname' : nextSort}">
-                    <button type="submit" class="btn-submit btn-update" style="padding: 8px 15px;">
+                    <button type="submit" class="btn btn-outline" style="padding: 8px 15px;">
                         Sort by ${empty nextSort || nextSort == 'fullname' ? 'Name' : 'Faculty'}
                     </button>
                 </form>
 
-                <a href="${pageContext.request.contextPath}/ListMentorServlet" class="btn-cancel" style="padding: 8px 15px;">Reset</a>
+                <a href="${pageContext.request.contextPath}/ListMentorServlet" class="btn btn-outline" style="padding: 8px 15px;">Reset</a>
             </div>
 
-            <div class ="table-wrapper">
+            <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
@@ -113,27 +110,30 @@
                                 <c:forEach var="mentor" items="${mentorList}">
                                     <tr>
                                         <td>${mentor.mentorID}</td>
-                                        <td>${mentor.mentorFullname}</td>
+                                        <td><b>${mentor.mentorFullname}</b></td>
                                         <td>${mentor.mentorUsername}</td>
                                         <td>${mentor.mentorEmail}</td>
                                         <td>${mentor.mentorPhone}</td>
                                         <td>${mentor.mentorFaculty}</td>
                                         <td style="text-align: center;">
-                                            <!-- Edit Link: Triggers doGet in EditMentorServlet -->
-                                            <a href="${pageContext.request.contextPath}/EditMentorServlet?id=${mentor.mentorID}" class="action-link edit-link">Edit</a>
-
-                                            <!-- Delete Link: Triggers Delete action -->
+                                            <a href="${pageContext.request.contextPath}/EditMentorServlet?id=${mentor.mentorID}" class="btn btn-primary" style="padding: 5px 10px; font-size: 0.8rem;">Edit</a>
+                                            
                                             <a href="${pageContext.request.contextPath}/EditMentorServlet?action=delete&id=${mentor.mentorID}" 
-                                               class="action-link del-link" 
+                                               class="btn btn-danger" 
+                                               style="padding: 5px 10px; font-size: 0.8rem;"
                                                onclick="return confirm('Permanently delete ${mentor.mentorFullname}?');">Delete</a>
                                         </td>
                                     </tr>
                                 </c:forEach>
                             </c:when>
                             <c:otherwise>
+                                <!-- EMPTY STATE DESIGN -->
                                 <tr>
-                                    <td colspan="7" style="text-align: center; padding: 20px;">
-                                        No mentors found. <a href="${pageContext.request.contextPath}/ListMentorServlet" style="color: #3498db;">Refresh List</a>
+                                    <td colspan="7" style="text-align: center; padding: 3rem;">
+                                        <i class="fas fa-user-slash" style="font-size: 2rem; color: #555; margin-bottom: 10px;"></i>
+                                        <p style="color: #999;">No mentors found matching your search.</p>
+                                        <br>
+                                        <a href="${pageContext.request.contextPath}/ListMentorServlet" class="btn btn-outline">Clear Search</a>
                                     </td>
                                 </tr>
                             </c:otherwise>

@@ -41,7 +41,6 @@ public class RegisterMenteeServlet extends HttpServlet {
         mentee.setMenteePhone(phone);
         mentee.setMenteeUsername(user);
         mentee.setMenteePassword(pass);
-        // Note: MentorID is intentionally left null
         
         // 3. Call DAO
         MenteeDAO dao = new MenteeDAO();
@@ -51,7 +50,6 @@ public class RegisterMenteeServlet extends HttpServlet {
         if("SUCCESS".equals(result)) {
             // Redirect to Login Page with Success Message
             request.setAttribute("errMessage", "Registration Successful! Please Login.");
-            // We forward to login.jsp so the message shows up
             request.getRequestDispatcher("login.jsp?role=mentee").forward(request, response);
         } else {
             // Failure: Go back to Register page with error

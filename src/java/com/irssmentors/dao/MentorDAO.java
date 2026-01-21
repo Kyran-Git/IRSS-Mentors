@@ -45,7 +45,6 @@ public class MentorDAO {
         List<Mentee> list = new ArrayList<>();
         try {
             Connection con = DBConnection.createConnection();
-            // Assuming table Mentee has FK mentorID
             String sql = "SELECT * FROM Mentee WHERE mentorID = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, mentorID);
@@ -81,7 +80,6 @@ public class MentorDAO {
 
                     if (rs.next()) {
                         mentor = new Mentor();
-                        // Match these EXACTLY to your Database column names
                         mentor.setMentorID(rs.getString("mentorID"));
                         mentor.setMentorFullname(rs.getString("mentorFullname"));
                         mentor.setMentorEmail(rs.getString("mentorEmail"));

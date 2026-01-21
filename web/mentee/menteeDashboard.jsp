@@ -34,7 +34,6 @@
                 <div class="card">
                     <h3>🎓 Personal Details</h3>
                     <p>View your profile and academic status.</p>
-                    <!-- Link to Servlet Action -->
                     <a href="${pageContext.request.contextPath}/MenteeServlet?action=viewProfile" class="btn-action">View Profile</a>
                 </div>
 
