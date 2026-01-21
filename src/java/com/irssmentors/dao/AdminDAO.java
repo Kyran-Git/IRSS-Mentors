@@ -1,6 +1,7 @@
 package com.irssmentors.dao;
 
 import com.irssmentors.model.Admin;
+import com.irssmentors.model.Mentee;
 import com.irssmentors.model.Mentor;
 import com.irssmentors.utility.DBConnection;
 import java.sql.*;
@@ -192,5 +193,122 @@ public class AdminDAO {
             if (result > 0) return "SUCCESS";
         } catch (SQLException e) { e.printStackTrace(); }
         return "FAILURE";
+    }
+    
+    // Get all Mentees from the database
+    public List<Mentee> getMenteeList() {
+        List<Mentee> menteeList = new ArrayList<>();
+        try (Connection con = DBConnection.createConnection()) {
+            String query = "SELECT * FROM Mentee";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Mentee m = new Mentee();
+                m.setMenteeID(rs.getString("menteeID"));
+                m.setMenteeFullname(rs.getString("menteeFullname"));
+                m.setMenteeProgramme(rs.getString("menteeProgramme"));
+                m.setMenteeSemester(rs.getInt("menteeSemester"));
+                m.setMenteeEmail(rs.getString("menteeEmail"));
+                m.setMentorID(rs.getString("mentorID")); 
+                menteeList.add(m);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return menteeList;
+    } // Added missing brace here
+
+    // The core assignment logic
+    public boolean assignMentorToMentee(String menteeID, String mentorID) {
+        try (Connection con = DBConnection.createConnection()) {
+            // We update the mentorID column for the specific student
+            String query = "UPDATE Mentee SET mentorID = ? WHERE menteeID = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, mentorID.isEmpty() ? null : mentorID); // Handle unassigning
+            ps.setString(2, menteeID);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public List<Mentee> searchMenteesByName(String name) {
+        List<Mentee> menteeList = new ArrayList<>();
+        try (Connection con = DBConnection.createConnection()) {
+            String query = "SELECT * FROM Mentee WHERE menteeFullname LIKE ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Mentee m = new Mentee();
+                m.setMenteeID(rs.getString("menteeID"));
+                m.setMenteeFullname(rs.getString("menteeFullname"));
+                m.setMenteeProgramme(rs.getString("menteeProgramme"));
+                m.setMenteeSemester(rs.getInt("menteeSemester"));
+                m.setMenteeEmail(rs.getString("menteeEmail"));
+                m.setMentorID(rs.getString("mentorID"));
+                menteeList.add(m);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return menteeList;
+    }
+
+    public List<Mentee> getSortedMenteeList(String column) {
+        List<Mentee> menteeList = new ArrayList<>();
+        String orderBy;
+
+        // Determine sorting logic
+        if ("programme".equals(column)) {
+            orderBy = "menteeProgramme ASC";
+        } else if ("status".equals(column)) {
+            // Group by NULL mentorIDs first, then by name
+            orderBy = "mentorID IS NOT NULL, menteeFullname ASC"; 
+        } else {
+            orderBy = "menteeFullname ASC";
+        }
+
+        String query = "SELECT * FROM Mentee ORDER BY " + orderBy;
+
+        try (Connection con = DBConnection.createConnection();
+             Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                Mentee m = new Mentee();
+                m.setMenteeID(rs.getString("menteeID"));
+                m.setMenteeFullname(rs.getString("menteeFullname"));
+                m.setMenteeProgramme(rs.getString("menteeProgramme"));
+                m.setMenteeSemester(rs.getInt("menteeSemester"));
+                m.setMenteeEmail(rs.getString("menteeEmail"));
+                m.setMentorID(rs.getString("mentorID"));
+                menteeList.add(m);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return menteeList;
+    }
+    
+    public List<Mentee> getMenteesByMentor(String mentorID) {
+        List<Mentee> menteeList = new ArrayList<>();
+        String query = "SELECT * FROM Mentee WHERE mentorID = ?";
+
+        try (Connection con = DBConnection.createConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, mentorID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Mentee m = new Mentee();
+                m.setMenteeID(rs.getString("menteeID"));
+                m.setMenteeFullname(rs.getString("menteeFullname"));
+                m.setMenteeProgramme(rs.getString("menteeProgramme"));
+                m.setMenteeSemester(rs.getInt("menteeSemester"));
+                m.setMenteeEmail(rs.getString("menteeEmail"));
+                m.setMentorID(rs.getString("mentorID"));
+                menteeList.add(m);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return menteeList;
     }
 }

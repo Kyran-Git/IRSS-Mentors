@@ -80,7 +80,7 @@
                 <div class="card">
                     <h3>🎓 Manage Mentees</h3>
                     <p>View student list and assign mentors.</p>
-                    <a href="admin/manageMentees.jsp" class="btn-action">Assign Students</a>
+                    <a href="manageMentees.jsp" class="btn-action">Assign Students</a>
                 </div>
 
                 <div class="card">

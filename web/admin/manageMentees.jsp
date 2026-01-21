@@ -1,71 +1,145 @@
-<%-- 
-    Document   : manageMentees
-    Created on : Dec 14, 2025, 3:10:18 AM
-    Author     : nikla
---%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    // SECURITY LOCK
+    if(session.getAttribute("adminSession") == null) {
+        response.sendRedirect("../login.jsp?role=admin");
+        return;
+    }
+%>
+<%
+    // FAILSAFE: Load lists if accessed directly
+    if(request.getAttribute("menteeList") == null) {
+        com.irssmentors.dao.AdminDAO tempDao = new com.irssmentors.dao.AdminDAO();
+        request.setAttribute("menteeList", tempDao.getMenteeList());
+        request.setAttribute("mentorList", tempDao.getMentorList());
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Manage Mentee Page</title>
+        <title>Manage Mentees</title>
         <style>
-            /* Shared Dark Theme */
-            body {
-                margin: 0; font-family: 'Segoe UI', sans-serif;
-                background-color: #1e2024; color: white;
-            }
+            /* CONSISTENT DARK THEME */
+            body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #1e2024; color: #ecf0f1; }
+            .navbar { background-color: #2c3e50; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #e74c3c; }
+            .navbar h2 { margin: 0; color: #ecf0f1; }
+            .btn-logout { padding: 8px 15px; background-color: #c0392b; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; }
+            .container { padding: 30px; max-width: 1200px; margin: 0 auto; }
+            
+            /* Table Styling from Mentor Page */
+            table { width: 100%; border-collapse: collapse; background-color: #2d3436; border-radius: 8px; overflow: hidden; margin-top: 20px; }
+            th { background-color: #e74c3c; color: white; padding: 12px; text-align: left; }
+            td { padding: 12px; border-bottom: 1px solid #444; }
+            tr:hover { background-color: #3d4648; }
 
-            /* Navbar */
-            .navbar {
-                background-color: #2d3436; padding: 15px 30px;
-                display: flex; justify-content: space-between; align-items: center;
-                border-bottom: 1px solid #444;
+            /* Dropdown and Button Styling */
+            select { 
+                padding: 8px; background: #3d4648; border: 1px solid #555; color: white; border-radius: 4px; width: 100%;
             }
-            .navbar h2 { margin: 0; color: #e74c3c; /* Red for Admin */ }
-            .btn-logout {
-                padding: 8px 15px; background-color: #c0392b; color: white;
-                text-decoration: none; border-radius: 5px; font-size: 14px;
-            }
-
-            /* Main Content Grid */
-            .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
-            .dashboard-grid {
-                display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 20px; margin-top: 20px;
-            }
-
-            /* Action Cards */
-            .card {
-                background-color: #2d3436; padding: 25px; border-radius: 10px;
-                text-align: center; border: 1px solid #444; transition: 0.3s;
-            }
-            .card:hover { transform: translateY(-5px); border-color: #e74c3c; }
-            .card h3 { margin-top: 0; }
-            .card p { color: #b2bec3; font-size: 14px; }
-
-            .btn-action {
-                display: inline-block; margin-top: 15px; padding: 10px 20px;
-                background-color: #444; color: white; text-decoration: none;
-                border-radius: 5px; transition: 0.3s;
-            }
-            .btn-action:hover { background-color: #e74c3c; }
+            .btn-submit { background-color: #27ae60; color: white; padding: 8px 15px; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
+            .status-unassigned { color: #f1c40f; font-style: italic; }
+            .status-assigned { color: #2ecc71; font-weight: bold; }
         </style>
     </head>
     <body>
         <div class="navbar">
             <h2>⚙️ Admin Portal</h2>
-            <a href="index.jsp" class="btn-logout">Logout</a>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <a href="adminDashboard.jsp" style="color: white; text-decoration: none;">Back</a>
+                <a href="${pageContext.request.contextPath}/index.jsp" class="btn-logout">Logout</a>
+            </div>
         </div>
 
         <div class="container">
-            <h1>Manage Mentees</h1>
-            <p style="color: #b2bec3;">System Overview</p>
+            <h3>🎓 Mentee Management & Assignment</h3>
+            <p style="color: #b2bec3; margin-bottom: 20px;">Assign students to their respective faculty mentors.</p>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: center;">
+                <form action="${pageContext.request.contextPath}/ListMenteeServlet" method="GET" style="display: flex; gap: 5px;">
+                    <input type="text" name="searchName" placeholder="Search mentee name..." value="${param.searchName}" 
+                           style="width: 250px; padding: 8px; background: #3d4648; border: 1px solid #555; color: white; border-radius: 4px;">
+                    <button type="submit" class="btn-submit" style="padding: 8px 15px;">Search</button>
+                </form>
+                           
+                <form action="${pageContext.request.contextPath}/ListMenteeServlet" method="GET" style="display: flex; gap: 5px;">
+                    <select name="filterMentorID" onchange="this.form.submit()" 
+                            style="width: 200px; padding: 8px; background: #3d4648; border: 1px solid #555; color: white; border-radius: 4px;">
+                        <option value="">-- Filter by Mentor --</option>
+                        <c:forEach var="mentor" items="${mentorList}">
+                            <option value="${mentor.mentorID}" ${param.filterMentorID == mentor.mentorID ? 'selected' : ''}>
+                                ${mentor.mentorFullname}
+                            </option>
+                        </c:forEach>
+                    </select>
+                </form>
 
-            <div class="dashboard-grid">
-                
+                <form action="${pageContext.request.contextPath}/ListMenteeServlet" method="GET">
+                    <input type="hidden" name="sortBy" value="${empty nextSort ? 'fullname' : nextSort}">
+                    <button type="submit" class="btn-submit" style="background-color: #f39c12; padding: 8px 15px;">
+                        Sort by: 
+                        <c:choose>
+                            <c:when test="${nextSort == 'programme'}">Programme</c:when>
+                            <c:when test="${nextSort == 'status'}">Assignment Status</c:when>
+                            <c:otherwise>Name</c:otherwise>
+                        </c:choose>
+                    </button>
+                </form>
+
+                <a href="${pageContext.request.contextPath}/ListMenteeServlet" 
+                   style="color: #b2bec3; text-decoration: none; font-size: 14px; margin-left: 10px;">Reset Filters</a>
             </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Full Name</th>
+                        <th>Programme</th>
+                        <th>Current Mentor</th>
+                        <th style="width: 300px;">Assign Mentor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="mentee" items="${menteeList}">
+                        <tr>
+                            <td>${mentee.menteeID}</td>
+                            <td>${mentee.menteeFullname}</td>
+                            <td>${mentee.menteeProgramme}</td>
+                            <td>
+                                <c:set var="mName" value="" />
+                                <c:forEach var="m" items="${mentorList}">
+                                    <c:if test="${m.mentorID == mentee.mentorID}">
+                                        <c:set var="mName" value="${m.mentorFullname}" />
+                                    </c:if>
+                                </c:forEach>
+                                
+                                <c:choose>
+                                    <c:when test="${not empty mName}">
+                                        <span class="status-assigned">${mName}</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="status-unassigned">Not Assigned</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <form action="${pageContext.request.contextPath}/ListMenteeServlet" method="POST" style="display: flex; gap: 5px;">
+                                    <input type="hidden" name="menteeID" value="${mentee.menteeID}">
+                                    <select name="mentorID">
+                                        <option value="">-- No Mentor --</option>
+                                        <c:forEach var="mentor" items="${mentorList}">
+                                            <option value="${mentor.mentorID}" ${mentor.mentorID == mentee.mentorID ? 'selected' : ''}>
+                                                ${mentor.mentorFullname} (${mentor.mentorFaculty})
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+                                    <button type="submit" class="btn-submit">Assign</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
         </div>
     </body>
 </html>
