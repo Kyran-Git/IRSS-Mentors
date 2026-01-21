@@ -21,6 +21,7 @@ public class ListMenteePerformance extends HttpServlet {
         String sortBy = request.getParameter("sortBy");
         List<Mentee> menteeList;
 
+        // 1. DATA RETRIEVAL
         if (searchName != null && !searchName.trim().isEmpty()) {
             menteeList = adminDAO.searchMenteesByName(searchName);
         } else if (sortBy != null && !sortBy.isEmpty()) {
@@ -29,17 +30,47 @@ public class ListMenteePerformance extends HttpServlet {
             menteeList = adminDAO.getMenteeList();
         }
 
+        // 2. SORT CYCLE LOGIC: (fullname -> programme -> back to fullname)
+        String nextSort;
+        if ("fullname".equals(sortBy)) {
+            nextSort = "programme";
+        } else {
+            nextSort = "fullname"; // If currently programme or empty, next is fullname
+        }
+
+        // 3. SET ATTRIBUTES
         request.setAttribute("menteeList", menteeList);
+        request.setAttribute("nextSort", nextSort);
+
         request.getRequestDispatcher("admin/manageMenteePerformance.jsp").forward(request, response);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+
+        String action = request.getParameter("action");
+        AdminDAO adminDAO = new AdminDAO();
+
+        if ("insertGPA".equals(action)) {
+            String menteeID = request.getParameter("menteeID");
+            int semester = Integer.parseInt(request.getParameter("semester"));
+            double gpa = Double.parseDouble(request.getParameter("gpa"));
+
+            boolean success = adminDAO.insertMenteeGPA(menteeID, semester, gpa);
+
+            if (success) {
+                request.setAttribute("message", "GPA added successfully for " + menteeID);
+            } else {
+                request.setAttribute("error", "Failed to add GPA. Check if record already exists.");
+            }
+        }
         processRequest(request, response);
     }
 }

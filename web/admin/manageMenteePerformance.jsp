@@ -20,7 +20,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Manage Performance</title>
         <style>
-            /* CONSISTENT DARK THEME - MATCHING MANAGE MENTEES */
+            /* CONSISTENT DARK THEME */
             body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #1e2024; color: #ecf0f1; }
             .navbar { background-color: #2c3e50; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #e74c3c; }
             .navbar h2 { margin: 0; color: #ecf0f1; }
@@ -40,6 +40,7 @@
             .inline-input { background: #1e2024 !important; border: 1px solid #555; color: #00d1b2 !important; padding: 5px !important; text-align: center; }
             
             .btn-submit { background-color: #27ae60; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
+            .btn-update { background-color: #f39c12; } /* Orange for sort button */
             .btn-cancel { background-color: #7f8c8d; text-decoration: none; padding: 10px 20px; color: white; border-radius: 4px; display:inline-block; text-align:center; font-size: 14px;}
 
             /* Alerts */
@@ -70,10 +71,25 @@
             </c:if>
 
             <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: center;">
+                
+                <%-- Search Form --%>
                 <form action="AdminServlet" method="GET" style="display: flex; gap: 5px;">
                     <input type="text" name="searchName" placeholder="Search mentee name..." value="${param.searchName}" style="width: 250px;">
                     <button type="submit" class="btn-submit" style="padding: 8px 15px;">Search</button>
                 </form>
+
+                <%-- Dynamic Sorting Button (Simplified: Name <-> Programme) --%>
+                <form action="AdminServlet" method="GET">
+                    <input type="hidden" name="sortBy" value="${empty nextSort ? 'fullname' : nextSort}">
+                    <button type="submit" class="btn-submit btn-update" style="padding: 8px 15px;">
+                        Sort by: 
+                        <c:choose>
+                            <c:when test="${nextSort == 'programme'}">Programme</c:when>
+                            <c:otherwise>Name</c:otherwise>
+                        </c:choose>
+                    </button>
+                </form>
+
                 <a href="AdminServlet" class="btn-cancel" style="padding: 8px 15px;">Reset</a>
             </div>
 

@@ -266,7 +266,7 @@ public class AdminDAO {
         return menteeList;
     }
 
-    // 12. Sort Mentees
+    // 12. Sort Mentees (REMOVED CGPA SORT)
     public List<Mentee> getSortedMenteeList(String column) {
         List<Mentee> menteeList = new ArrayList<>();
         String orderBy;
@@ -275,8 +275,6 @@ public class AdminDAO {
             orderBy = "menteeProgramme ASC";
         } else if ("status".equals(column)) {
             orderBy = "(CASE WHEN mentorID IS NULL THEN 0 ELSE 1 END) ASC, menteeFullname ASC";
-        } else if ("cgpa".equals(column)) {
-            orderBy = "menteeCGPA DESC";
         } else {
             orderBy = "menteeFullname ASC";
         }
@@ -325,7 +323,6 @@ public class AdminDAO {
         try (Connection con = DBConnection.createConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
 
-            // Simple unique ID generation (e.g., P + timestamp)
             String perfID = "P" + System.currentTimeMillis() % 100000; 
             String status = (gpa >= 2.0) ? "Pass" : "Fail";
 
@@ -337,7 +334,6 @@ public class AdminDAO {
 
             int rows = ps.executeUpdate();
 
-            // Optional: Update the average CGPA in the main Mentee table
             if (rows > 0) {
                 syncMainMenteeCGPA(menteeID);
             }
@@ -348,7 +344,6 @@ public class AdminDAO {
         }
     }
 
-    // Helper to keep Mentee table CGPA updated
     private void syncMainMenteeCGPA(String menteeID) {
         String syncQuery = "UPDATE Mentee SET menteeCGPA = (SELECT AVG(gpa) FROM MenteePerformance WHERE menteeID = ?) WHERE menteeID = ?";
         try (Connection con = DBConnection.createConnection();
