@@ -7,8 +7,8 @@ package com.irssmentors.controller;
 
 import com.irssmentors.dao.AdminDAO;
 import com.irssmentors.model.Admin;
-import com.irssmentors.dao.MentorDAO;
-import com.irssmentors.model.Mentor;
+import com.irssmentors.dao.MenteeDAO;
+import com.irssmentors.model.Mentee;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -33,7 +33,50 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
-        HttpSession session = request.getSession();
+        Admin admin = new Admin(username, password);
+        AdminDAO adminDao = new AdminDAO();
+        
+        Mentee mentee = new Mentee(username, password);
+        MenteeDAO menteeDao = new MenteeDAO();
+        String userValidate = "";
+       
+        
+        if("Admin".equals(role)){
+            userValidate = adminDao.authenticateUser(admin);
+        }else if("Mentor".equals(role)){
+            //Mentor
+        }else  if("Mentee".equals(role)){
+            userValidate = menteeDao.authenticateUser(mentee);
+        }else{
+            request.setAttribute("error","Invalid login");   
+            request.getRequestDispatcher("login.jsp").forward(request,response);
+        }
+       
+        if(userValidate.equals("SUCCESS")){
+            request.setAttribute("username",username);
+            request.getRequestDispatcher("admin/adminDashboard.jsp").forward(request, response);
+        }
+        else
+        {
+            request.setAttribute("errMessage", userValidate);
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+        }   
+    }
+    
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
 
         // 2. Route based on Role
         if ("admin".equalsIgnoreCase(role)) {

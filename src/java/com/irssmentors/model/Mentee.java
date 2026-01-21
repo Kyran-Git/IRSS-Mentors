@@ -14,6 +14,8 @@ import java.io.Serializable;
 public class Mentee implements Serializable{
     
     private String menteeID;
+    private String username;
+    private String password;
     private String menteeFullname;
     private String menteeEmail;
     private String menteePhone;
@@ -24,9 +26,20 @@ public class Mentee implements Serializable{
     private String mentorID; //Foreign key
     
     
+    public Mentee(String username, String password){
+        this.username = username;
+        this.password = password;
+    }
+    
     //getters
     public String getMenteeID(){
         return menteeID;
+    }
+    public String getUsername(){
+        return username;
+    }
+    public String getPassword(){
+        return password;
     }
     public String getMenteeFullname(){
         return menteeFullname;
@@ -56,6 +69,12 @@ public class Mentee implements Serializable{
     //setters
     public void setMenteeID(String menteeID){
         this.menteeID = menteeID;
+    }
+    public void setUsername(String username){
+        this.username=username;
+    }
+    public void setPassword(String password){
+        this.password=password;
     }
     public void setMenteeFullname(String menteeFullname){
         this.menteeFullname = menteeFullname;
