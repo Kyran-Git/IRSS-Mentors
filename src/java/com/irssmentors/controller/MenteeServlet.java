@@ -1,86 +1,68 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.irssmentors.controller;
 
+import com.irssmentors.model.Mentee;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author nikla
- */
+@WebServlet(name = "MenteeServlet", urlPatterns = {"/MenteeServlet"})
 public class MenteeServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet MenteeServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet MenteeServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        
+        HttpSession session = request.getSession();
+        Mentee currentMentee = (Mentee) session.getAttribute("menteeSession");
+
+        // Security Check
+        if (currentMentee == null) {
+            response.sendRedirect("login.jsp?role=mentee");
+            return;
+        }
+
+        String action = request.getParameter("action");
+        if (action == null) action = "dashboard";
+
+        switch (action) {
+            case "dashboard":
+                response.sendRedirect("mentee/menteeDashboard.jsp");
+                break;
+
+            case "viewProfile":
+                // The data is already in 'menteeSession', so we just forward to the JSP
+                request.getRequestDispatcher("mentee/menteeProfile.jsp").forward(request, response);
+                break;
+                
+            case "viewPerformance":
+                // TODO: Add logic to fetch performance list from DAO later
+                response.sendRedirect("mentee/menteeDashboard.jsp"); // Placeholder
+                break;
+                
+            case "viewMentor":
+                // TODO: Add logic to fetch Mentor details based on currentMentee.getMentorID()
+                response.sendRedirect("mentee/menteeDashboard.jsp"); // Placeholder
+                break;
+                
+            case "viewTimetable":
+                 // TODO: Add logic to fetch Mentor Timetable
+                response.sendRedirect("mentee/menteeDashboard.jsp"); // Placeholder
+                break;
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }
