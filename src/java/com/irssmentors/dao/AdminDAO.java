@@ -181,17 +181,30 @@ public class AdminDAO {
         } catch (Exception e){ e.printStackTrace(); }
     }
     
-    // 8. Delete
     public String deleteMentor(String mentorID) {
+        Connection con = null;
         try {
-            Connection con = DBConnection.createConnection();
-            String query = "DELETE FROM Mentor WHERE mentorID = ?";
-            PreparedStatement statement = con.prepareStatement(query);
-            statement.setString(1, mentorID);
-            int result = statement.executeUpdate();
+            con = DBConnection.createConnection();
+            con.setAutoCommit(false);
+
+            String unassignQuery = "UPDATE Mentee SET mentorID = NULL WHERE mentorID = ?";
+            PreparedStatement psUnassign = con.prepareStatement(unassignQuery);
+            psUnassign.setString(1, mentorID);
+            psUnassign.executeUpdate();
+
+            String deleteQuery = "DELETE FROM Mentor WHERE mentorID = ?";
+            PreparedStatement psDelete = con.prepareStatement(deleteQuery);
+            psDelete.setString(1, mentorID);
+            int result = psDelete.executeUpdate();
+
+            con.commit();
             con.close();
+
             if (result > 0) return "SUCCESS";
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            if(con != null) { try { con.rollback(); } catch(Exception ex){} }
+            e.printStackTrace();
+        }
         return "FAILURE";
     }
     
@@ -252,10 +265,16 @@ public class AdminDAO {
     public List<Mentee> getSortedMenteeList(String column) {
         List<Mentee> menteeList = new ArrayList<>();
         String orderBy;
-        if ("programme".equals(column)) orderBy = "menteeProgramme ASC";
-        else if ("status".equals(column)) orderBy = "mentorID IS NOT NULL, menteeFullname ASC";
-        else if ("cgpa".equals(column)) orderBy = "menteeCGPA DESC"; 
-        else orderBy = "menteeFullname ASC";
+
+        if ("programme".equals(column)) {
+            orderBy = "menteeProgramme ASC";
+        } else if ("status".equals(column)) {
+            orderBy = "(CASE WHEN mentorID IS NULL THEN 0 ELSE 1 END) ASC, menteeFullname ASC";
+        } else if ("cgpa".equals(column)) {
+            orderBy = "menteeCGPA DESC";
+        } else {
+            orderBy = "menteeFullname ASC";
+        }
 
         String query = "SELECT * FROM Mentee ORDER BY " + orderBy;
         try (Connection con = DBConnection.createConnection();

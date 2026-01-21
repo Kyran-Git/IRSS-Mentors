@@ -32,29 +32,22 @@ public class ListMenteeServlet extends HttpServlet {
 
         List<Mentee> menteeList;
 
-        // 3. LOGIC LADDER (Prioritizes Search > Filter > Sort > Default)
-        if (searchName != null && !searchName.trim().isEmpty()) {
-            menteeList = adminDAO.searchMenteesByName(searchName);
-        } 
-        else if (filterMentorID != null && !filterMentorID.trim().isEmpty()) {
-            menteeList = adminDAO.getMenteesByMentor(filterMentorID);
-        } 
-        else if (sortBy != null && !sortBy.isEmpty()) {
+        if (sortBy != null && !sortBy.isEmpty()) {
             menteeList = adminDAO.getSortedMenteeList(sortBy);
-        } 
-        else {
+        } else if (searchName != null && !searchName.trim().isEmpty()) {
+            menteeList = adminDAO.searchMenteesByName(searchName);
+        } else if (filterMentorID != null && !filterMentorID.trim().isEmpty()) {
+            menteeList = adminDAO.getMenteesByMentor(filterMentorID);
+        } else {
             menteeList = adminDAO.getMenteeList();
         }
 
-        // 4. NEXT SORT CYCLE (Reverted: Name -> Programme -> Status -> Name)
+        // 4. FIX CYCLE: (Name -> Programme -> Status -> back to Name)
         String nextSort;
-        if ("fullname".equals(sortBy)) {
-            nextSort = "programme";
-        } else if ("programme".equals(sortBy)) {
-            nextSort = "status";
-        } else {
-            nextSort = "fullname";
-        }
+        if ("fullname".equals(sortBy)) nextSort = "programme";
+        else if ("programme".equals(sortBy)) nextSort = "status";
+        else if ("status".equals(sortBy)) nextSort = "fullname"; // Added missing link
+        else nextSort = "fullname";
 
         // 5. SET ATTRIBUTES AND FORWARD
         request.setAttribute("menteeList", menteeList);

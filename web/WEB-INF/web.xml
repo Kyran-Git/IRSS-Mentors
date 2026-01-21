@@ -6,7 +6,7 @@
     </servlet>
     <servlet>
         <servlet-name>AdminServlet</servlet-name>
-        <servlet-class>com.irssmentors.controller.AdminServlet</servlet-class>
+        <servlet-class>com.irssmentors.controller.ListMenteePerformance</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>MentorServlet</servlet-name>
