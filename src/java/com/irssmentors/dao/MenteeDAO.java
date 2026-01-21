@@ -55,8 +55,8 @@ public class MenteeDAO {
 
     public String authenticateUser(Mentee mentee) {
 
-        String username = mentee.getUsername();
-        String password = mentee.getPassword();
+        String username = mentee.getMenteeUsername();
+        String password = mentee.getMenteePassword();
 
         Connection con = null;
         Statement statement = null;
