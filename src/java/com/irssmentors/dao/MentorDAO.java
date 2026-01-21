@@ -69,26 +69,28 @@ public class MentorDAO {
         return list;
     }
     
-                        public Mentor getMentorByID(String mentorID) {
-                Mentor mentor = null;
-                // Using try-with-resources to automatically close the connection
-                try (Connection con = DBConnection.createConnection()) {
-                    String sql = "SELECT * FROM Mentor WHERE mentorID = ?";
-                    PreparedStatement ps = con.prepareStatement(sql);
-                    ps.setString(1, mentorID);
-                    ResultSet rs = ps.executeQuery();
+    public Mentor getMentorByID(String mentorID) {
+        Mentor mentor = null;
+        // Using try-with-resources to automatically close the connection
+        try (Connection con = DBConnection.createConnection()) {
+            String sql = "SELECT * FROM Mentor WHERE mentorID = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, mentorID);
+            ResultSet rs = ps.executeQuery();
 
-                    if (rs.next()) {
-                        mentor = new Mentor();
-                        mentor.setMentorID(rs.getString("mentorID"));
-                        mentor.setMentorFullname(rs.getString("mentorFullname"));
-                        mentor.setMentorEmail(rs.getString("mentorEmail"));
-                        mentor.setMentorPhone(rs.getString("mentorPhone"));
-                        mentor.setMentorFaculty(rs.getString("mentorFaculty"));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return mentor;
+            if (rs.next()) {
+                mentor = new Mentor();
+                mentor.setMentorID(rs.getString("MENTORID"));
+                mentor.setMentorUsername(rs.getString("MENTORUSERNAME"));
+                mentor.setMentorPassword(rs.getString("MENTORPASSWORD"));
+                mentor.setMentorFullname(rs.getString("MENTORFULLNAME"));
+                mentor.setMentorEmail(rs.getString("MENTOREMAIL"));
+                mentor.setMentorPhone(rs.getString("MENTORPHONE"));
+                mentor.setMentorFaculty(rs.getString("MENTORFACULTY"));
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mentor;
+    }
 }
