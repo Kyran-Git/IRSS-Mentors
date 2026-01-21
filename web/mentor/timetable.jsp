@@ -72,29 +72,23 @@
                         <tr>
                             <th>Day</th>
                             <th>Time</th>
+                            <th>Booked By</th> <!-- New Column -->
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:choose>
-                            <c:when test="${not empty timetableList}">
-                                <c:forEach var="slot" items="${timetableList}">
-                                    <tr>
-                                        <td>${slot.availableDay}</td>
-                                        <td>${slot.availableTime}</td>
-                                        <td>
-                                            <a href="${pageContext.request.contextPath}/MentorServlet?action=removeSlot&id=${slot.mentorTimeID}" 
-                                               class="btn-remove" onclick="return confirm('Delete this slot?');">Remove</a>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                <tr>
-                                    <td colspan="3" style="text-align: center; padding: 20px; color: #b2bec3;">No availability slots found.</td>
-                                </tr>
-                            </c:otherwise>
-                        </c:choose>
+                        <c:forEach var="slot" items="${slotList}">
+                            <tr>
+                                <td>${slot.availableDay}</td>
+                                <td>${slot.availableTime}</td>
+                                <td style="color: #3498db;">
+                                    ${empty slot.menteeName ? "—" : slot.menteeName}
+                                </td>
+                                <td>
+                                    <a href="MentorServlet?action=removeSlot&id=${slot.mentorTimeID}" class="btn-remove">Remove</a>
+                                </td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </div>
