@@ -19,7 +19,7 @@ public class AdminServlet extends HttpServlet {
         AdminDAO adminDAO = new AdminDAO();
         String action = request.getParameter("action");
 
-        // 1. HANDLE UPDATES (POST Action)
+        // 1. HANDLE POST UPDATES
         if ("updatePerformance".equals(action)) {
             String menteeID = request.getParameter("menteeID");
             String cgpaStr = request.getParameter("cgpa");
@@ -28,63 +28,50 @@ public class AdminServlet extends HttpServlet {
                 try {
                     double cgpa = Double.parseDouble(cgpaStr);
                     adminDAO.updateMenteePerformance(menteeID, cgpa);
-                    request.setAttribute("message", "Performance updated successfully for " + menteeID);
+                    request.setAttribute("message", "Performance updated for " + menteeID);
                 } catch (NumberFormatException e) {
-                    request.setAttribute("error", "Invalid CGPA format. Please enter a valid number.");
+                    request.setAttribute("error", "Invalid CGPA format.");
                 }
             }
         }
 
-        // 2. GET PARAMETERS FOR SEARCH AND SORT
+        // 2. GET SEARCH AND SORT PARAMS
         String searchName = request.getParameter("searchName");
         String sortBy = request.getParameter("sortBy");
         List<Mentee> menteeList;
 
-        // 3. LOGIC LADDER (Prioritizes Search > Sort > Default)
+        // 3. SELECTION LOGIC
         if (searchName != null && !searchName.trim().isEmpty()) {
-            // Reusing your existing search method from the DAO
             menteeList = adminDAO.searchMenteesByName(searchName);
-        } 
-        else if (sortBy != null && !sortBy.isEmpty()) {
-            // Reusing your existing sort method from the DAO
+        } else if (sortBy != null && !sortBy.isEmpty()) {
             menteeList = adminDAO.getSortedMenteeList(sortBy);
-        } 
-        else {
-            // Default View
+        } else {
             menteeList = adminDAO.getMenteeList();
         }
 
-        // 4. DETERMINE NEXT SORT STATE (Toggle Logic)
-        // Cycles: fullname -> cgpa -> fullname
+        // 4. NEXT SORT STATE (3-WAY TOGGLE: Name -> CGPA -> Programme -> Name)
         String nextSort;
         if ("fullname".equals(sortBy)) {
-            nextSort = "cgpa"; // This allows the button to toggle to CGPA sorting next
+            nextSort = "cgpa";
+        } else if ("cgpa".equals(sortBy)) {
+            nextSort = "programme";
         } else {
-            nextSort = "fullname"; // Default or reset toggle
+            nextSort = "fullname";
         }
 
-        // 5. SET ATTRIBUTES AND FORWARD
+        // 5. FORWARD
         request.setAttribute("menteeList", menteeList);
         request.setAttribute("nextSort", nextSort);
-        
-        // Forward to the consistent Performance JSP
         request.getRequestDispatcher("admin/manageMenteePerformance.jsp").forward(request, response);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Controller for Admin to manage and filter Mentee academic performance";
     }
 }
