@@ -62,10 +62,10 @@ public class MentorServlet extends HttpServlet {
                 
             case "viewTimetable":
                 // 1. Get List from DAO
-                List<MentorTimetable> timetable = timetableDAO.getTimetable(currentMentor.getMentorID());
+                List<MentorTimetable> timetable = timetableDAO.getTimetableForMentor(currentMentor.getMentorID());
                 
                 // 2. Set as Attribute (Must match the name used in JSP <c:forEach>)
-                request.setAttribute("timetableList", timetable);
+                request.setAttribute("slotList", timetable);
                 
                 // 3. Forward to JSP
                 request.getRequestDispatcher("mentor/timetable.jsp").forward(request, response);
