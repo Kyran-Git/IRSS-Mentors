@@ -56,6 +56,10 @@ public class Mentee implements Serializable {
         this.menteePassword = password;
     }
 
+    public Mentee() {
+
+    }
+
     // getters
     public String getMenteeID() {
         return menteeID;

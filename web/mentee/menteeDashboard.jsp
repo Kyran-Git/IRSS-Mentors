@@ -1,24 +1,102 @@
 <%-- 
-    Document   : menteeDashboard
-    Created on : Dec 14, 2025, 3:11:24 AM
+    Document   : adminDashboard
+    Created on : Dec 14, 2025, 3:09:54 AM
     Author     : nikla
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    // SECURITY LOCK: Only allow if session is Mentee
-    if(session.getAttribute("menteeSession") == null) {
+    // SECURITY LOCK: Only allow if session is Admin
+    if(request.getSession().getAttribute("menteeSession") == null) {
         response.sendRedirect("../login.jsp?role=mentee"); // Kick them out
-        return;
+       return;
     }
+    
+
 %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Mentee Dashboard</title>
+        <style>
+            /* Shared Dark Theme */
+            body {
+                margin: 0; font-family: 'Segoe UI', sans-serif;
+                background-color: #1e2024; color: white;
+            }
+
+            /* Navbar */
+            .navbar {
+                background-color: #2d3436; padding: 15px 30px;
+                display: flex; justify-content: space-between; align-items: center;
+                border-bottom: 1px solid #444;
+            }
+            .navbar h2 { margin: 0; color: #e74c3c; /* Red for Admin */ }
+            .btn-logout {
+                padding: 8px 15px; background-color: #c0392b; color: white;
+                text-decoration: none; border-radius: 5px; font-size: 14px;
+            }
+
+            /* Main Content Grid */
+            .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
+            .dashboard-grid {
+                display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px; margin-top: 20px;
+            }
+
+            /* Action Cards */
+            .card {
+                background-color: #2d3436; padding: 25px; border-radius: 10px;
+                text-align: center; border: 1px solid #444; transition: 0.3s;
+            }
+            .card:hover { transform: translateY(-5px); border-color: #e74c3c; }
+            .card h3 { margin-top: 0; }
+            .card p { color: #b2bec3; font-size: 14px; }
+
+            .btn-action {
+                display: inline-block; margin-top: 15px; padding: 10px 20px;
+                background-color: #444; color: white; text-decoration: none;
+                border-radius: 5px; transition: 0.3s;
+            }
+            .btn-action:hover { background-color: #e74c3c; }
+        </style>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <div class="navbar">
+            <h2>⚙️ Mentee Portal</h2>
+            <a href="${pageContext.request.contextPath}/LogoutServlet" class="btn-logout">Logout</a>
+        </div>
+
+        <div class="container">
+            <h1>Welcome, Mentee</h1>
+            <p style="color: #b2bec3;">System Overview</p>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>👥 View Performance Overview</h3>
+                    <p>Displays GPA and status per semester.</p>
+                    <a href="${pageContext.request.contextPath}/ListMentorServlet" class="btn-action">View Mentors</a>
+                </div>
+
+                <div class="card">
+                    <h3>🎓 View Personal Details</h3>
+                    <p>Shows mentee profile and current status.</p>
+                    <a href="admin/manageMentees.jsp" class="btn-action">Assign Students</a>
+                </div>
+
+                <div class="card">
+                    <h3>📊 View Mentor Details</h3>
+                    <p>Displays mentor name, contact, faculty.</p>
+                    <a href="#" class="btn-action">View Reports</a>
+                </div>
+                
+                <div class="card">
+                    <h3>📊 Select Mentor Timetable</h3>
+                    <p>Shows mentor availability.</p>
+                    <a href="#" class="btn-action">View Reports</a>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
