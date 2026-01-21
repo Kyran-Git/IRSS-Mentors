@@ -56,8 +56,10 @@
     <body>
         <div class="navbar">
             <h2>⚙️ Admin Portal</h2>
-            <!-- Link Logout to Servlet if possible, otherwise index.jsp -->
-            <a href="${pageContext.request.contextPath}/index.jsp" class="btn-logout">Logout</a>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <a href="admin/adminDashboard.jsp" style="color: white; text-decoration: none;">Back</a>
+                <a href="${pageContext.request.contextPath}/index.jsp" class="btn-logout">Logout</a>
+            </div>
         </div>
 
         <div class="container">

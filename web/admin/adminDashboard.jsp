@@ -80,13 +80,13 @@
                 <div class="card">
                     <h3>🎓 Manage Mentees</h3>
                     <p>View student list and assign mentors.</p>
-                    <a href="admin/manageMentees.jsp" class="btn-action">Assign Students</a>
+                    <a href="${pageContext.request.contextPath}/ListMenteeServlet" class="btn-action">Assign Students</a>
                 </div>
 
                 <div class="card">
                     <h3>📊 Performance Reports</h3>
                     <p>Review overall CGPA statistics.</p>
-                    <a href="#" class="btn-action">View Reports</a>
+                    <a href="${pageContext.request.contextPath}/AdminServlet" class="btn-action">View Reports</a>   
                 </div>
             </div>
         </div>
