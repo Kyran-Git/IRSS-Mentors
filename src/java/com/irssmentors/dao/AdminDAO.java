@@ -62,7 +62,7 @@ public class AdminDAO {
         return "Failed register";
     }
     
-    // 3. Get List
+    // 3. Get Mentor List
     public List<Mentor> getMentorList(){
         List<Mentor> mentorList = new ArrayList<>();
         Connection con = null;
@@ -87,7 +87,7 @@ public class AdminDAO {
         return mentorList;
     }
 
-    // 4. Search
+    // 4. Search Mentors
     public List<Mentor> searchMentorsByName(String name) {
         List<Mentor> mentorList = new ArrayList<>();
         try {
@@ -112,7 +112,7 @@ public class AdminDAO {
         return mentorList;
     }
     
-    // 5. Sort
+    // 5. Sort Mentors
     public List<Mentor> getSortedMentorList(String column) {
         List<Mentor> mentorList = new ArrayList<>();
         String orderBy = "mentorFullname"; 
@@ -139,7 +139,7 @@ public class AdminDAO {
         return mentorList;
     }
     
-    // 6. Get By ID
+    // 6. Get Mentor By ID
     public Mentor getMentorByID(String mentorID) {
         Mentor mentor = null;
         try {
@@ -163,7 +163,7 @@ public class AdminDAO {
         return mentor;
     }
     
-    // 7. Update
+    // 7. Update Mentor
     public void updateMentor(Mentor mentor){
         try{
             Connection con = DBConnection.createConnection(); 
@@ -181,6 +181,7 @@ public class AdminDAO {
         } catch (Exception e){ e.printStackTrace(); }
     }
     
+    // 8. Delete Mentor
     public String deleteMentor(String mentorID) {
         Connection con = null;
         try {
@@ -208,6 +209,7 @@ public class AdminDAO {
         return "FAILURE";
     }
     
+    // 9. Get Mentee List
     public List<Mentee> getMenteeList() {
         List<Mentee> menteeList = new ArrayList<>();
         try (Connection con = DBConnection.createConnection()) {
@@ -230,6 +232,7 @@ public class AdminDAO {
         return menteeList;
     }
 
+    // 10. Assign Mentor
     public boolean assignMentorToMentee(String menteeID, String mentorID) {
         try (Connection con = DBConnection.createConnection()) {
             String query = "UPDATE Mentee SET mentorID = ? WHERE menteeID = ?";
@@ -243,6 +246,7 @@ public class AdminDAO {
         }
     }
     
+    // 11. Search Mentees
     public List<Mentee> searchMenteesByName(String name) {
         List<Mentee> menteeList = new ArrayList<>();
         try (Connection con = DBConnection.createConnection()) {
@@ -262,6 +266,7 @@ public class AdminDAO {
         return menteeList;
     }
 
+    // 12. Sort Mentees
     public List<Mentee> getSortedMenteeList(String column) {
         List<Mentee> menteeList = new ArrayList<>();
         String orderBy;
@@ -293,6 +298,7 @@ public class AdminDAO {
         return menteeList;
     }
 
+    // 13. Get Mentees By Mentor
     public List<Mentee> getMenteesByMentor(String mentorID) {
         List<Mentee> menteeList = new ArrayList<>();
         String query = "SELECT * FROM Mentee WHERE mentorID = ?";
@@ -313,16 +319,43 @@ public class AdminDAO {
         return menteeList;
     }
     
-    public boolean updateMenteePerformance(String menteeID, double cgpa) {
-        String query = "UPDATE Mentee SET menteeCGPA = ? WHERE menteeID = ?";
+    // 14. Insert Mentee GPA
+    public boolean insertMenteeGPA(String menteeID, int semester, double gpa) {
+        String query = "INSERT INTO MenteePerformance (perfID, menteeID, semester, gpa, status) VALUES (?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.createConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setDouble(1, cgpa);
+
+            // Simple unique ID generation (e.g., P + timestamp)
+            String perfID = "P" + System.currentTimeMillis() % 100000; 
+            String status = (gpa >= 2.0) ? "Pass" : "Fail";
+
+            ps.setString(1, perfID);
             ps.setString(2, menteeID);
-            return ps.executeUpdate() > 0;
+            ps.setInt(3, semester);
+            ps.setDouble(4, gpa);
+            ps.setString(5, status);
+
+            int rows = ps.executeUpdate();
+
+            // Optional: Update the average CGPA in the main Mentee table
+            if (rows > 0) {
+                syncMainMenteeCGPA(menteeID);
+            }
+            return rows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    // Helper to keep Mentee table CGPA updated
+    private void syncMainMenteeCGPA(String menteeID) {
+        String syncQuery = "UPDATE Mentee SET menteeCGPA = (SELECT AVG(gpa) FROM MenteePerformance WHERE menteeID = ?) WHERE menteeID = ?";
+        try (Connection con = DBConnection.createConnection();
+             PreparedStatement ps = con.prepareStatement(syncQuery)) {
+            ps.setString(1, menteeID);
+            ps.setString(2, menteeID);
+            ps.executeUpdate();
+        } catch (SQLException e) { e.printStackTrace(); }
     }
 }
