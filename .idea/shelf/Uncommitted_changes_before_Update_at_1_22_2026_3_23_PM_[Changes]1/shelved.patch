@@ -1,0 +1,190 @@
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	(date 1769066603042)
++++ b/.idea/vcs.xml	(date 1769066603042)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/libraries/Java_EE_6_Java_EE_6.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/libraries/Java_EE_6_Java_EE_6.xml b/.idea/libraries/Java_EE_6_Java_EE_6.xml
+new file mode 100644
+--- /dev/null	(date 1769066603011)
++++ b/.idea/libraries/Java_EE_6_Java_EE_6.xml	(date 1769066603011)
+@@ -0,0 +1,17 @@
++<component name="libraryTable">
++  <library name="Java EE 6-Java EE 6">
++    <CLASSES>
++      <root url="jar://$PROJECT_DIR$/lib/javax.ejb.jar!/" />
++      <root url="jar://$PROJECT_DIR$/lib/javax.transaction.jar!/" />
++      <root url="jar://$PROJECT_DIR$/lib/javax.servlet.jsp.jar!/" />
++      <root url="jar://$PROJECT_DIR$/lib/javax.jms.jar!/" />
++      <root url="jar://$PROJECT_DIR$/lib/javax.annotation.jar!/" />
++      <root url="jar://$PROJECT_DIR$/lib/javax.servlet.jsp.jstl.jar!/" />
++      <root url="jar://$PROJECT_DIR$/lib/javax.persistence.jar!/" />
++      <root url="jar://$PROJECT_DIR$/lib/javax.resource.jar!/" />
++      <root url="jar://$PROJECT_DIR$/lib/javax.servlet.jar!/" />
++    </CLASSES>
++    <JAVADOC />
++    <SOURCES />
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644
+--- /dev/null	(date 1769066603097)
++++ b/.idea/.gitignore	(date 1769066603097)
+@@ -0,0 +1,8 @@
++# Default ignored files
++/shelf/
++/workspace.xml
++# Editor-based HTTP Client requests
++/httpRequests/
++# Datasource local storage ignored files
++/dataSources/
++/dataSources.local.xml
+Index: IRSSMentors.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/IRSSMentors.iml b/IRSSMentors.iml
+new file mode 100644
+--- /dev/null	(date 1769066603073)
++++ b/IRSSMentors.iml	(date 1769066603073)
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" inherit-compiler-output="true">
++    <exclude-output />
++    <content url="file://$MODULE_DIR$">
++      <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
++    </content>
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++    <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
++  </component>
++</module>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+new file mode 100644
+--- /dev/null	(date 1769066603172)
++++ b/.idea/modules.xml	(date 1769066603172)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/IRSSMentors.iml" filepath="$PROJECT_DIR$/IRSSMentors.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/copilot.data.migration.agent.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/copilot.data.migration.agent.xml b/.idea/copilot.data.migration.agent.xml
+new file mode 100644
+--- /dev/null	(date 1769066603123)
++++ b/.idea/copilot.data.migration.agent.xml	(date 1769066603123)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="AgentMigrationStateService">
++    <option name="migrationStatus" value="COMPLETED" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	(date 1769066603241)
++++ b/.idea/misc.xml	(date 1769066603241)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_25" default="true" project-jdk-name="25" project-jdk-type="JavaSDK">
++    <output url="file://$PROJECT_DIR$/out" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/copilot.data.migration.ask2agent.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/copilot.data.migration.ask2agent.xml b/.idea/copilot.data.migration.ask2agent.xml
+new file mode 100644
+--- /dev/null	(date 1769066603212)
++++ b/.idea/copilot.data.migration.ask2agent.xml	(date 1769066603212)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Ask2AgentMigrationStateService">
++    <option name="migrationStatus" value="COMPLETED" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/copilot.data.migration.ask.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/copilot.data.migration.ask.xml b/.idea/copilot.data.migration.ask.xml
+new file mode 100644
+--- /dev/null	(date 1769066603286)
++++ b/.idea/copilot.data.migration.ask.xml	(date 1769066603286)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="AskMigrationStateService">
++    <option name="migrationStatus" value="COMPLETED" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/copilot.data.migration.edit.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/copilot.data.migration.edit.xml b/.idea/copilot.data.migration.edit.xml
+new file mode 100644
+--- /dev/null	(date 1769066603269)
++++ b/.idea/copilot.data.migration.edit.xml	(date 1769066603269)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="EditMigrationStateService">
++    <option name="migrationStatus" value="COMPLETED" />
++  </component>
++</project>
+\ No newline at end of file
